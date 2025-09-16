@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 
 export const NavigationBar: FC = () => {
   return (
-    <nav className="flex w-screen pr-4 pl-6 lg:px-15 lg:h-[124px]  bg-white justify-between items-center">
+    <nav className="flex w-screen pr-4 pl-6 lg:px-15 lg:h-[124px] h-[96px] bg-white justify-between items-center">
       <div className="flex gap-16">
         <h3 className="lg:text-[32px] text-2xl font-bold text-blue-500">
           MORENT
@@ -21,7 +21,7 @@ export const NavigationBar: FC = () => {
             type="search"
           />
           <Image
-            className="absolute top-3 left-3"
+            className="absolute top-2 left-3"
             src="./search.svg"
             alt="search"
             height={24}
