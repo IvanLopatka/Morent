@@ -1,11 +1,13 @@
 import { NavigationBar } from "@/components";
 import { MobileSearch } from "@/components";
+import { RentalCarCard } from "@/components";
 
 export default function Home() {
   return (
-    <div className="grid min-h-screen grid-rows-[auto_1fr_auto] items-start justify-center font-[family-name:var(--font-geist-sans)">
+    <div className="grid mb-20 min-h-screen grid-rows-[auto_1fr_auto] items-start justify-center font-[family-name:var(--font-geist-sans)">
       <NavigationBar />
       <MobileSearch />
+      <RentalCarCard />
     </div>
   );
 }
