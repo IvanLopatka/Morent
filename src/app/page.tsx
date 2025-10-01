@@ -1,4 +1,4 @@
-import { NavigationBar } from "@/components";
+import { MobileAd, NavigationBar } from "@/components";
 import { MobileSearch } from "@/components";
 import { RentalCarCard } from "@/components";
 
@@ -8,6 +8,7 @@ export default function Home() {
       <NavigationBar />
       <MobileSearch />
       <RentalCarCard />
+      <MobileAd />
     </div>
   );
 }
