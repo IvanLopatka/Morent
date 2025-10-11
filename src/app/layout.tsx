@@ -27,10 +27,12 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className="overflow-x-hidden">
+        <div
+          className={`overflow-x-hidden ${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          {children}
+        </div>
       </body>
     </html>
   );
