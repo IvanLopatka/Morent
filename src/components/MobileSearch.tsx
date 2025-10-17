@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export const MobileSearch: FC = () => {
   return (
-    <div className="w-full relative px-6 h-[48px] justify-center gap-4 items-center lg:hidden flex">
+    <div className="w-full relative px-6 mb-8 h-[48px] bg-white justify-center gap-x-4 items-center lg:hidden flex">
       <Input
         className="pl-12 rounded-2xl h-full text-xl"
         placeholder="Search something here"
