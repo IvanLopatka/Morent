@@ -7,11 +7,13 @@ import { Calendar } from "./ui/calendar";
 import { Button } from "./ui/button";
 import Image from "next/image";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 interface CarLocation {
@@ -38,6 +40,11 @@ export const CompareCars: FC = () => {
     time: "",
   });
 
+  const hourOptions = Array.from(
+    { length: 24 },
+    (_, hour) => `${String(hour).padStart(2, "0")}:00`
+  );
+
   const handlePickUpLocationChange = (location: CarLocation) => {
     setPickUpLocation({
       ...pickUpLocation,
@@ -57,10 +64,10 @@ export const CompareCars: FC = () => {
   };
 
   return (
-    <div className="flex w-screen flex-col lg:flex-row px-6 mb-50 lg:px-16 justify-center lg:justify-between gap-8 lg:gap-11 items-center">
+    <div className="flex w-screen flex-col lg:flex-row px-6 mb-50 lg:px-16 justify-center lg:justify-between gap-8 items-center">
       <Popover>
-        <div className="flex justify-start w-[90vw] gap-y-4 bg-white p-4 lg:px-12 lg:py-6 rounded-[10px] flex-col">
-          <div className="flex gap-2 flex-row">
+        <div className="flex justify-center w-[87vw] gap-y-4 bg-white p-4 lg:px-12 lg:py-6 rounded-[10px] flex-col">
+          <div className="flex gap-4 flex-row">
             <Image
               alt="pick-up"
               src="./pick-up-mark.svg"
@@ -69,60 +76,77 @@ export const CompareCars: FC = () => {
             />
             <p className="font-semibold">Pick - Up</p>
           </div>
+          <div className="flex flex-row gap-5">
+            <div className="flex flex-col w-[40%] lg:w-2/3">
+              <p className="font-bold">Location</p>
 
-          <Accordion
-            type="single"
-            className="justify-between gap-6 lg:gap-12 flex"
-            orientation="horizontal"
-            collapsible
-          >
-            <div className="w-1/3">
-              <AccordionItem value="location">
-                <p className="font-bold">Location</p>
+              <Select
+                value={pickUpLocation.city.name}
+                onValueChange={(value) =>
+                  setPickUpLocation((prev) => ({
+                    ...prev,
+                    city: { name: value },
+                  }))
+                }
+              >
+                <SelectTrigger className="border-none p-0 shadow-none">
+                  <p className="text-xs font-medium hover:underline  text-gray-500">
+                    {pickUpLocation.city.name
+                      ? pickUpLocation.city.name
+                      : "Select your city"}
+                  </p>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="New York">New York</SelectItem>
+                  <SelectItem value="Los Angeles">Los Angeles</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-                <AccordionTrigger>
-                  <p className="text-xs font-medium text-gray-500">
-                    Select your city
-                  </p>
-                </AccordionTrigger>
-              </AccordionItem>
+            <div className="w-[40%] lg:w-2/3 ">
+              <p className="font-bold mb-[10px]">Date</p>
+              <PopoverTrigger asChild>
+                <p className="text-xs font-medium hover:underline  text-gray-500">
+                  {pickUpLocation.date
+                    ? pickUpLocation.date.toLocaleDateString()
+                    : "Select your date"}
+                </p>
+              </PopoverTrigger>
+              <PopoverContent>
+                <Calendar
+                  mode="single"
+                  selected={pickUpLocation.date}
+                  onSelect={(date) =>
+                    setPickUpLocation((prev) => ({ ...prev, date }))
+                  }
+                  className="rounded-md border-none"
+                  captionLayout="dropdown"
+                />
+              </PopoverContent>
             </div>
-            <div className="w-1/3">
-              <AccordionItem value="Date">
-                <p className="font-bold">Date</p>
-                <PopoverTrigger asChild>
-                  <AccordionTrigger>
-                    <p className="text-xs font-medium text-gray-500">
-                      {pickUpLocation.date
-                        ? pickUpLocation.date.toLocaleDateString()
-                        : "Select your date"}
-                    </p>
-                  </AccordionTrigger>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <Calendar
-                    mode="single"
-                    selected={pickUpLocation.date}
-                    onSelect={(date) =>
-                      setPickUpLocation((prev) => ({ ...prev, date }))
-                    }
-                    className="rounded-md border-none"
-                    captionLayout="dropdown"
-                  />
-                </PopoverContent>
-              </AccordionItem>
+
+            <div className="w-[20%] lg:w-1/3 flex flex-col">
+              <p className="flex-wrap font-bold">Time</p>
+              <Select
+                value={pickUpLocation.time || undefined}
+                onValueChange={(value) =>
+                  setPickUpLocation((prev) => ({ ...prev, time: value }))
+                }
+              >
+                <SelectTrigger className="border-none p-0 shadow-none">
+                  <SelectValue placeholder="-:-" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  {hourOptions.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            <div className="w-1/3">
-              <AccordionItem value="Time">
-                <p className="font-bold">Time</p>
-                <AccordionTrigger>
-                  <p className="text-xs font-medium text-gray-500">
-                    Select your time
-                  </p>
-                </AccordionTrigger>
-              </AccordionItem>
-            </div>
-          </Accordion>
+          </div>
         </div>
       </Popover>
 
@@ -133,7 +157,7 @@ export const CompareCars: FC = () => {
         <Image src="./swap.svg" alt="swap" width={24} height={24} />
       </Button>
       <Popover>
-        <div className="flex justify-start gap-y-4 w-[90vw] bg-white p-4 lg:px-12 lg:py-6 rounded-[10px] flex-col">
+        <div className="flex justify-start gap-y-4 w-[87vw] bg-white p-4 lg:px-12 lg:py-6 rounded-[10px] flex-col">
           <div className="flex gap-2 flex-row">
             <Image
               alt="drop-off"
@@ -143,59 +167,75 @@ export const CompareCars: FC = () => {
             />
             <p className="font-semibold">Drop - Off</p>
           </div>
+          <div className="flex flex-row gap-5">
+            <div className="flex flex-col w-[40%] lg:w-2/3">
+              <p className="font-bold">Location</p>
 
-          <Accordion
-            type="single"
-            className="justify-between gap-12 flex"
-            orientation="horizontal"
-            collapsible
-          >
-            <div className="w-1/3">
-              <AccordionItem value="location">
-                <p className="font-bold">Location</p>
-                <AccordionTrigger>
-                  <p className="text-xs font-medium text-gray-500">
-                    Select your city
+              <Select
+                value={dropOffLocation.city.name}
+                onValueChange={(value) =>
+                  setDropOffLocation((prev) => ({
+                    ...prev,
+                    city: { name: value },
+                  }))
+                }
+              >
+                <SelectTrigger className="border-none p-0 shadow-none">
+                  <p className="text-xs font-medium hover:underline  text-gray-500">
+                    {dropOffLocation.city.name
+                      ? dropOffLocation.city.name
+                      : "Select your city"}
                   </p>
-                </AccordionTrigger>
-              </AccordionItem>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="New York">New York</SelectItem>
+                  <SelectItem value="Los Angeles">Los Angeles</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <div className="w-1/3">
-              <AccordionItem value="Date">
-                <p className="font-bold">Date</p>
-                <PopoverTrigger asChild>
-                  <AccordionTrigger>
-                    <p className="text-xs font-medium text-gray-500">
-                      {dropOffLocation.date
-                        ? dropOffLocation.date.toLocaleDateString()
-                        : "Select your date"}
-                    </p>
-                  </AccordionTrigger>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <Calendar
-                    mode="single"
-                    selected={dropOffLocation.date}
-                    onSelect={(date) =>
-                      setDropOffLocation((prev) => ({ ...prev, date }))
-                    }
-                    className="rounded-md border-none"
-                    captionLayout="dropdown"
-                  />
-                </PopoverContent>
-              </AccordionItem>
+            <div className="flex flex-col w-[40%] lg:w-2/3">
+              <p className="font-bold mb-[10px]">Date</p>
+              <PopoverTrigger asChild>
+                <p className="text-xs font-medium hover:underline text-gray-500">
+                  {dropOffLocation.date
+                    ? dropOffLocation.date.toLocaleDateString()
+                    : "Select your date"}
+                </p>
+              </PopoverTrigger>
+              <PopoverContent>
+                <Calendar
+                  mode="single"
+                  selected={dropOffLocation.date}
+                  onSelect={(date) =>
+                    setDropOffLocation((prev) => ({ ...prev, date }))
+                  }
+                  className="rounded-md border-none"
+                  captionLayout="dropdown"
+                />
+              </PopoverContent>
             </div>
-            <div className="w-1/3">
-              <AccordionItem value="Time">
-                <p className="font-bold">Time</p>
-                <AccordionTrigger>
-                  <p className="text-xs font-medium text-gray-500">
-                    Select your time
-                  </p>
-                </AccordionTrigger>
-              </AccordionItem>
+            <div className="flex flex-col w-[20%] lg:w-1/3">
+              <p className="flex-wrap font-bold">Time</p>
+              <Select
+                value={dropOffLocation.time || undefined}
+                onValueChange={(value) =>
+                  setDropOffLocation((prev) => ({ ...prev, time: value }))
+                }
+              >
+                <SelectTrigger className="border-none p-0 shadow-none">
+                  <SelectValue placeholder="-:-" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  {hourOptions.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-          </Accordion>
+          </div>
         </div>
       </Popover>
     </div>
