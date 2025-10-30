@@ -2,6 +2,7 @@ import { MobileAd, NavigationBar } from "@/components";
 import { MobileSearch } from "@/components";
 import { RentalCarCard } from "@/components";
 import { CompareCars } from "@/components";
+import { PopularCar } from "@/components";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <RentalCarCard />
       <MobileAd />
       <CompareCars />
+      <PopularCar />
     </div>
   );
 }
