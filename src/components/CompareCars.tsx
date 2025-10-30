@@ -1,7 +1,13 @@
 "use client";
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { FC } from "react";
 import { useState } from "react";
+import {
+  useQuery,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 
 import { Calendar } from "./ui/calendar";
 import { Button } from "./ui/button";
@@ -15,6 +21,7 @@ import {
 } from "./ui/select";
 
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { getCities } from "@/lib/api";
 
 interface CarLocation {
   city: {
@@ -25,6 +32,12 @@ interface CarLocation {
 }
 
 export const CompareCars: FC = () => {
+  const { data: cityNames = [] } = useQuery({
+    queryKey: ["cities"],
+    queryFn: getCities,
+  });
+
+  console.log(cityNames);
   const [pickUpLocation, setPickUpLocation] = useState<CarLocation>({
     city: {
       name: "",
@@ -97,8 +110,17 @@ export const CompareCars: FC = () => {
                   </p>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="New York">New York</SelectItem>
-                  <SelectItem value="Los Angeles">Los Angeles</SelectItem>
+                  {cityNames.length > 0 ? (
+                    cityNames.map((city) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="No cities found">
+                      No cities found
+                    </SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -188,8 +210,17 @@ export const CompareCars: FC = () => {
                   </p>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="New York">New York</SelectItem>
-                  <SelectItem value="Los Angeles">Los Angeles</SelectItem>
+                  {cityNames.length > 0 ? (
+                    cityNames.map((city) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="No cities found">
+                      No cities found
+                    </SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>

@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import { FC } from "react";
 import { Button } from "./ui/button";
 
@@ -24,7 +23,7 @@ export const RentalCarCard: FC = () => {
         </div>
       </div>
 
-      <div className="w-[45vw] md:flex hidden h-[360px] bg-cover rounded-[10px] bg-[url('/right-ad.png')]">
+      <div className="w-[45vw] md:flex hidden h-[360px] bg-cover bg-bottom rounded-[10px] bg-[url('/right-ad.png')]">
         <div className="z-10 flex flex-col pl-6 gap-4 pt-6">
           <h2 className="text-white text-wrap text-[2rem] font-semibold ">
             Easy way to rent a <br /> car at a low price
