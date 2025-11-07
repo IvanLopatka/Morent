@@ -1,13 +1,32 @@
 import React from "react";
 import { FC } from "react";
+import { Cars } from "@/lib/Cars-data";
+import { CarCard } from "./CarCard";
 
 export const PopularCar: FC = () => {
   return (
-    <div className="px-6 mb-8">
-      <div className="rounded-2xl bg-bottom bg-cover h-[232px] ">
-        <div className="z-10 flex flex-col pl-6 gap-4 pt-6">
-          <h2 className="font-semibold ">The Best Platform for Car Rental</h2>
-        </div>
+    <div className="px-5 md:px-16 w-screen mb-8">
+      <div className="flex px-2 justify-between items-center mb-5">
+        <p className="md:text-md text-sm text-gray-400 font-semibold">
+          Popular Car
+        </p>{" "}
+        <p className="md:text-md text-xs font-semibold text-blue-600 ">
+          View all
+        </p>
+      </div>
+      <div className="hidden lg:flex justify-between">
+        {Cars.slice(0, 4).map((Car) => (
+          <div key={Car.id}>
+            <CarCard
+              name={Car.name}
+              type={Car.type}
+              image={Car.image}
+              price={Car.price}
+              seats={Car.seats}
+              spending={Car.spending}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
