@@ -26,7 +26,7 @@ export const CarCard: FC<CarCardProps> = ({
     setIsLiked(!isLiked);
   };
   return (
-    <div className="lg:w-[21vw] w-[65vw] overflow-hidden justify-between px-4 md:px-6 py-3 h-[300px] md:h-[380px] gap-y-6 flex flex-col rounded-[10px] bg-white">
+    <div className="lg:w-[21vw] w-[65vw] overflow-hidden justify-between px-4 md:px-6 py-3 h-[310px] md:h-[380px] gap-y-4 flex flex-col rounded-[10px] bg-white">
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-col gap-y-1">
           <p className="text-lg font-semibold">{name}</p>
