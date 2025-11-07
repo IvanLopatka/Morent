@@ -72,7 +72,7 @@ export const CompareCars: FC = () => {
   };
 
   return (
-    <div className="flex w-screen flex-col lg:flex-row px-6 mb-50 lg:px-16 justify-center lg:justify-between gap-8 items-center">
+    <div className="flex w-screen flex-col lg:flex-row px-6 mb-8  lg:px-16 justify-center lg:justify-between gap-8 items-center">
       <Popover>
         <div className="flex justify-center w-[87vw] gap-y-4 bg-white p-4 lg:px-12 lg:py-6 rounded-[10px] flex-col">
           <div className="flex gap-4 flex-row">
