@@ -1,13 +1,8 @@
 "use client";
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import { FC } from "react";
 import { useState } from "react";
-import {
-  useQuery,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import { Calendar } from "./ui/calendar";
 import { Button } from "./ui/button";
