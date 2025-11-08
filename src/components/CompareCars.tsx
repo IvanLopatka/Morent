@@ -32,7 +32,6 @@ export const CompareCars: FC = () => {
     queryFn: getCities,
   });
 
-  console.log(cityNames);
   const [pickUpLocation, setPickUpLocation] = useState<CarLocation>({
     city: {
       name: "",
@@ -170,6 +169,7 @@ export const CompareCars: FC = () => {
       <Button
         size="icon"
         className="w-15 absolute lg:relative h-15 bg-blue-600"
+        onClick={handleSwapLocations}
       >
         <Image src="./swap.svg" alt="swap" width={24} height={24} />
       </Button>
