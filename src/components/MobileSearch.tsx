@@ -15,7 +15,7 @@ export const MobileSearch: FC = () => {
       />
       <Image
         className="absolute top-3 left-9"
-        src="./search.svg"
+        src="/search.svg"
         alt="search"
         height={24}
         width={24}
@@ -26,7 +26,7 @@ export const MobileSearch: FC = () => {
         size="icon"
         variant="outline"
       >
-        <Image src="./filter.svg" alt="filter2" width={24} height={24} />
+        <Image src="/filter.svg" alt="filter2" width={24} height={24} />
       </Button>
     </div>
   );

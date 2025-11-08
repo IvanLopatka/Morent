@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 export const RentalCarCard: FC = () => {
   return (
     <div className="lg:flex hidden px-16 gap-8 mb-8 justify-center ">
-      <div className="w-[45vw] bg-cover h-[360px] bg-bottom rounded-[10px] bg-[url('/left-ad.png')]">
+      <div className="w-full bg-cover h-[360px] bg-bottom rounded-[10px] bg-[url('/left-ad.png')]">
         <div className="z-10 flex flex-col pl-6 gap-4 pt-6">
           <h2 className="text-white text-wrap text-[2rem] font-semibold ">
             The Best Platform <br /> for Car Rental
@@ -23,7 +23,7 @@ export const RentalCarCard: FC = () => {
         </div>
       </div>
 
-      <div className="w-[45vw] md:flex hidden h-[360px] bg-cover bg-bottom rounded-[10px] bg-[url('/right-ad.png')]">
+      <div className="w-full md:flex hidden h-[360px] bg-cover bg-bottom rounded-[10px] bg-[url('/right-ad.png')]">
         <div className="z-10 flex flex-col pl-6 gap-4 pt-6">
           <h2 className="text-white text-wrap text-[2rem] font-semibold ">
             Easy way to rent a <br /> car at a low price

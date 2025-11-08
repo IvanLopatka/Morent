@@ -4,6 +4,7 @@ import { RentalCarCard } from "@/components";
 import { CompareCars } from "@/components";
 import { PopularCar } from "@/components";
 import { MobilePopularCar } from "@/components";
+import { RecomendationCar } from "@/components";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <CompareCars />
       <PopularCar />
       <MobilePopularCar />
+      <RecomendationCar />
     </div>
   );
 }
