@@ -7,10 +7,10 @@ export const PopularCar: FC = () => {
   return (
     <div className="px-5 md:px-16 w-screen mb-0 md:mb-8">
       <div className="flex px-2 justify-between items-center mb-5">
-        <p className="md:text-md text-sm text-gray-400 font-semibold">
+        <p className="md:text-base text-sm text-gray-400 font-semibold">
           Popular Car
-        </p>{" "}
-        <p className="md:text-md text-xs font-semibold text-blue-600 ">
+        </p>
+        <p className="md:text-base text-xs font-semibold text-blue-600 ">
           View all
         </p>
       </div>
