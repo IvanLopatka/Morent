@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { FC } from "react";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
 
 interface CarCardProps {
+  className?: string;
   name: string;
   type: string;
   image: string;
@@ -20,13 +22,19 @@ export const CarCard: FC<CarCardProps> = ({
   price,
   seats,
   spending,
+  className,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
   const handleLike = () => {
     setIsLiked(!isLiked);
   };
   return (
-    <div className="lg:w-[21vw] w-[65vw] overflow-hidden justify-between px-4 md:px-6 py-3 h-[310px] md:h-[380px] gap-y-4 flex flex-col rounded-[10px] bg-white">
+    <div
+      className={cn(
+        "lg:w-[21vw] w-[65vw] overflow-hidden justify-between px-4 md:px-6 py-3 h-[310px] md:h-[380px] gap-y-4 flex flex-col rounded-[10px] bg-white",
+        className
+      )}
+    >
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-col gap-y-1">
           <p className="text-lg font-semibold">{name}</p>

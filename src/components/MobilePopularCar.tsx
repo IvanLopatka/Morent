@@ -13,7 +13,10 @@ import {
 
 export const MobilePopularCar: FC = () => {
   return (
-    <Carousel className="lg:hidden mb-8 block mask-r-from-20% w-screen">
+    <Carousel
+      opts={{ loop: true }}
+      className="lg:hidden mb-8 block mask-r-from-20% w-screen"
+    >
       <CarouselContent className="ml-2 gap-x-5">
         {Cars.slice(0, 4).map((car) => (
           <CarouselItem className="basis-2/3 overflow-visible" key={car.id}>
