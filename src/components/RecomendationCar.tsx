@@ -3,10 +3,11 @@ import React from "react";
 import { Cars } from "@/lib/Cars-data";
 import { CarCard } from "./CarCard";
 import { FC } from "react";
+import { Button } from "./ui/button";
 
 export const RecomendationCar: FC = () => {
   return (
-    <div className="px-5 md:px-16 w-screen mb-0 md:mb-8">
+    <div className="px-5 md:px-16 w-screen mb-12 md:mb-16">
       <div className="flex px-2 justify-between items-center mb-5">
         <p className="md:text-base text-sm text-gray-400 font-semibold">
           Recomendation Car
@@ -29,7 +30,7 @@ export const RecomendationCar: FC = () => {
         ))}
       </div>
       {/* Large screens: show first 8 */}
-      <div className="hidden lg:flex flex-wrap gap-y-8 justify-between">
+      <div className="hidden lg:flex  flex-wrap gap-y-8 justify-between">
         {Cars.slice(0, 8).map((Car) => (
           <div key={Car.id}>
             <CarCard
@@ -42,6 +43,12 @@ export const RecomendationCar: FC = () => {
             />
           </div>
         ))}
+      </div>
+      <div className="flex h-11 mt-12 lg:mt-16 relative items-center justify-center w-full">
+        <Button size="lg" className=" h-full bg-blue-600">
+          Show more car
+        </Button>
+        <p className="text-sm absolute right-0 text-gray-400 font-semibold">{`${Cars.length} cars`}</p>
       </div>
     </div>
   );
