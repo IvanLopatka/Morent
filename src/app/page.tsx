@@ -5,6 +5,7 @@ import { CompareCars } from "@/components";
 import { PopularCar } from "@/components";
 import { MobilePopularCar } from "@/components";
 import { RecomendationCar } from "@/components";
+import { AboutUs } from "@/components";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <PopularCar />
       <MobilePopularCar />
       <RecomendationCar />
+      <AboutUs />
     </div>
   );
 }
