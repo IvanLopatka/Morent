@@ -17,6 +17,14 @@ import {
 
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { getCities } from "@/lib/api";
+import { cn } from "@/lib/utils";
+
+type CompareCarsVariant = "default" | "catalog";
+
+interface CompareCarsProps {
+  gapVariant?: CompareCarsVariant;
+  widthVariant?: CompareCarsVariant;
+}
 
 interface CarLocation {
   city: {
@@ -26,7 +34,10 @@ interface CarLocation {
   time: string;
 }
 
-export const CompareCars: FC = () => {
+export const CompareCars: FC<CompareCarsProps> = ({
+  gapVariant = "default",
+  widthVariant = "default",
+}) => {
   const { data: cityNames = [] } = useQuery({
     queryKey: ["cities"],
     queryFn: getCities,
@@ -52,18 +63,16 @@ export const CompareCars: FC = () => {
     (_, hour) => `${String(hour).padStart(2, "0")}:00`
   );
 
-  const handlePickUpLocationChange = (location: CarLocation) => {
-    setPickUpLocation({
-      ...pickUpLocation,
-      ...location,
-    });
-  };
-  const handleDropOffLocationChange = (location: CarLocation) => {
-    setDropOffLocation({
-      ...dropOffLocation,
-      ...location,
-    });
-  };
+  const gapVariants = {
+    default: "gap-8 w-full lg:w-screen justify-center lg:justify-between",
+
+    catalog: "gap-0 w-full mt-8 justify-center",
+  } as const;
+  const widthVariants = {
+    default: "w-[87vw]",
+    catalog: "lg:w-[30vw] w-[87vw]",
+  } as const;
+
   const handleSwapLocations = () => {
     const temp = pickUpLocation;
     setPickUpLocation(dropOffLocation);
@@ -71,9 +80,19 @@ export const CompareCars: FC = () => {
   };
 
   return (
-    <div className="flex w-screen flex-col lg:flex-row px-6 mb-8  lg:px-16 justify-center lg:justify-between gap-8 items-center">
+    <div
+      className={cn(
+        "flex flex-col lg:flex-row px-6 mb-8 lg:px-16 items-center",
+        gapVariants[gapVariant]
+      )}
+    >
       <Popover>
-        <div className="flex justify-center w-[87vw] gap-y-4 bg-white p-4 lg:px-12 lg:py-6 rounded-[10px] flex-col">
+        <div
+          className={cn(
+            "flex justify-center gap-y-4 bg-white p-4 lg:px-12 lg:py-6 rounded-[10px] flex-col",
+            widthVariants[widthVariant]
+          )}
+        >
           <div className="flex gap-4 flex-row">
             <Image
               alt="pick-up"
@@ -128,6 +147,7 @@ export const CompareCars: FC = () => {
                     : "Select your date"}
                 </p>
               </PopoverTrigger>
+
               <PopoverContent>
                 <Calendar
                   mode="single"
@@ -174,7 +194,12 @@ export const CompareCars: FC = () => {
         <Image src="./swap.svg" alt="swap" width={24} height={24} />
       </Button>
       <Popover>
-        <div className="flex justify-start gap-y-4 w-[87vw] bg-white p-4 lg:px-12 lg:py-6 rounded-[10px] flex-col">
+        <div
+          className={cn(
+            "flex justify-start gap-y-4 bg-white p-4 lg:px-12 lg:py-6 rounded-[10px] flex-col",
+            widthVariants[widthVariant]
+          )}
+        >
           <div className="flex gap-2 flex-row">
             <Image
               alt="drop-off"
@@ -219,6 +244,7 @@ export const CompareCars: FC = () => {
                 </SelectContent>
               </Select>
             </div>
+
             <div className="flex flex-col w-[40%] lg:w-2/3">
               <p className="font-bold mb-[10px]">Date</p>
               <PopoverTrigger asChild>
@@ -240,6 +266,7 @@ export const CompareCars: FC = () => {
                 />
               </PopoverContent>
             </div>
+
             <div className="flex flex-col w-[20%] lg:w-1/3">
               <p className="flex-wrap font-bold">Time</p>
               <Select

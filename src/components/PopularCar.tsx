@@ -6,7 +6,7 @@ import { CarCard } from "./CarCard";
 export const PopularCar: FC = () => {
   return (
     <div className="px-5 md:px-16 w-screen mb-0 md:mb-8">
-      <div className="flex px-2 justify-between items-center mb-5">
+      <div className="flex px-4 justify-between items-center mb-5">
         <p className="md:text-base text-sm text-gray-400 font-semibold">
           Popular Car
         </p>

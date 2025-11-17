@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 
 export const NavigationBar: FC = () => {
   return (
-    <nav className="flex w-full px-6 lg:px-16  mb-0 lg:mb-8 lg:h-[124px] h-[96px] bg-white justify-between items-center">
+    <nav className="flex w-full px-6 lg:px-16  mb-0  lg:h-[124px] h-[96px] bg-white justify-between items-center">
       <div className="flex gap-16">
         <h3 className="lg:text-[32px] text-2xl font-bold text-shadow text-blue-500">
           MORENT
