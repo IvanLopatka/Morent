@@ -4,10 +4,12 @@ import { Cars } from "@/lib/Cars-data";
 import { CarCard } from "./CarCard";
 import { FC } from "react";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 export const RecomendationCar: FC = () => {
+  const router = useRouter();
   return (
-    <div className="px-5 md:px-16 w-screen mb-12 md:mb-16">
+    <div className="px-5 md:px-16 mt-8 mb-12 md:mb-16">
       <div className="flex px-2 justify-between items-center mb-5">
         <p className="md:text-base text-sm text-gray-400 font-semibold">
           Recomendation Car
@@ -16,7 +18,7 @@ export const RecomendationCar: FC = () => {
       {/* Mobile: show first 5 */}
       <div className="flex lg:hidden flex-wrap gap-y-8 justify-center">
         {Cars.slice(0, 5).map((Car) => (
-          <div className="w-screen" key={Car.id}>
+          <div className="w-full" key={Car.id}>
             <CarCard
               className="w-full h-full"
               name={Car.name}
@@ -30,8 +32,8 @@ export const RecomendationCar: FC = () => {
         ))}
       </div>
       {/* Large screens: show first 8 */}
-      <div className="hidden lg:flex  flex-wrap gap-y-8 justify-between">
-        {Cars.slice(0, 8).map((Car) => (
+      <div className="hidden lg:flex flex-wrap gap-y-8 justify-between">
+        {Cars.slice(0, 9).map((Car) => (
           <div key={Car.id}>
             <CarCard
               name={Car.name}
@@ -45,7 +47,11 @@ export const RecomendationCar: FC = () => {
         ))}
       </div>
       <div className="flex h-11 mt-12 lg:mt-16 relative items-center justify-center w-full">
-        <Button size="lg" className=" h-full bg-blue-600">
+        <Button
+          size="lg"
+          onClick={() => router.push("/catalog")}
+          className="h-full bg-blue-600"
+        >
           Show more car
         </Button>
         <p className="text-sm absolute right-0 text-gray-400 font-semibold">{`${Cars.length} cars`}</p>

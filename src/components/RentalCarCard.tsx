@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 
 export const RentalCarCard: FC = () => {
   return (
-    <div className="lg:flex hidden px-16 gap-8 mb-8 justify-center ">
+    <div className="lg:flex hidden px-16 mt-8 gap-8 mb-8 justify-center ">
       <div className="w-full bg-cover h-[360px] bg-bottom rounded-[10px] bg-[url('/left-ad.png')]">
         <div className="z-10 flex flex-col pl-6 gap-4 pt-6">
           <h2 className="text-white text-wrap text-[2rem] font-semibold ">
