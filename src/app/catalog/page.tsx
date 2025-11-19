@@ -3,7 +3,8 @@ import { MobileSearch } from "@/components";
 import { CompareCars } from "@/components";
 
 import { RecomendationCar } from "@/components";
-import { Sidebar } from "@/components/Sidebar";
+import { Sidebar } from "@/components";
+import { AboutUs } from "@/components";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
           <RecomendationCar />
         </div>
       </div>
+      <AboutUs />
     </div>
   );
 }
