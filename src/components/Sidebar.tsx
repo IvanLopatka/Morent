@@ -3,6 +3,7 @@ import React from "react";
 import { Label } from "./ui/label";
 import { Slider } from "./ui/slider";
 import { Checkbox } from "./ui/checkbox";
+import { Cars } from "@/lib/Cars-data";
 
 export const Sidebar = () => {
   const [maxPrice, setMaxPrice] = React.useState<number[]>([100]);
@@ -13,46 +14,67 @@ export const Sidebar = () => {
           <p className="text-xs text-gray-500 font-semibold">Type</p>
           <div className="flex gap-2">
             <Checkbox id="sport" />
-            <Label htmlFor="sport">Sport</Label>
+            <Label htmlFor="sport">
+              Sport ({Cars.filter((car) => car.type === "Sportscar").length})
+            </Label>
           </div>
           <div className="flex gap-2">
             <Checkbox id="suv" />
-            <Label htmlFor="suv">SUV</Label>
+            <Label htmlFor="suv">
+              SUV ({Cars.filter((car) => car.type === "SUV").length})
+            </Label>
           </div>
           <div className="flex gap-2">
             <Checkbox id="mpv" />
-            <Label htmlFor="mpv">MPV</Label>
+            <Label htmlFor="mpv">
+              MPV ({Cars.filter((car) => car.type === "MPV").length})
+            </Label>
           </div>
           <div className="flex gap-2">
             <Checkbox id="sedan" />
-            <Label htmlFor="sedan">Sedan</Label>
+            <Label htmlFor="sedan">
+              Sedan ({Cars.filter((car) => car.type === "Sedan").length})
+            </Label>
           </div>
           <div className="flex gap-2">
             <Checkbox id="coupe" />
-            <Label htmlFor="coupe">Coupe</Label>
+            <Label htmlFor="coupe">
+              Coupe ({Cars.filter((car) => car.type === "Coupe").length})
+            </Label>
           </div>
           <div className="flex gap-2">
             <Checkbox id="hatchback" />
-            <Label htmlFor="hatchback">Hatchback</Label>
+            <Label htmlFor="hatchback">
+              Hatchback ({Cars.filter((car) => car.type === "Hatchback").length}
+              )
+            </Label>
           </div>
         </div>
         <div className="flex flex-col gap-8">
           <p className="text-xs text-gray-500 font-semibold">Capacity</p>
           <div className="flex gap-2">
             <Checkbox id="2-person" />
-            <Label htmlFor="2-person">2 Person</Label>
+            <Label htmlFor="2-person">
+              2 Person ({Cars.filter((car) => car.seats === "2").length})
+            </Label>
           </div>
           <div className="flex gap-2">
             <Checkbox id="4-person" />
-            <Label htmlFor="4-person">4 Person</Label>
+            <Label htmlFor="4-person">
+              4 Person ({Cars.filter((car) => car.seats === "4").length})
+            </Label>
           </div>
           <div className="flex gap-2">
             <Checkbox id="6-person" />
-            <Label htmlFor="6-person">6 Person</Label>
+            <Label htmlFor="6-person">
+              6 Person ({Cars.filter((car) => car.seats === "6").length})
+            </Label>
           </div>
           <div className="flex gap-2">
             <Checkbox id="8-or-more" />
-            <Label htmlFor="8-or-more">8 or More</Label>
+            <Label htmlFor="8-or-more">
+              8 or More ({Cars.filter((car) => car.seats === "8").length})
+            </Label>
           </div>
         </div>
         <div className="flex h-5 flex-col gap-8">
