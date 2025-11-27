@@ -18,6 +18,7 @@ export const MobilePopularCar: FC = () => {
         {Cars.slice(0, 4).map((car) => (
           <CarouselItem className="basis-2/3 overflow-visible" key={car.id}>
             <CarCard
+              id={car.id}
               name={car.name}
               type={car.type}
               image={car.image}

@@ -4,9 +4,11 @@ import { FC } from "react";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface CarCardProps {
   className?: string;
+  id: string;
   name: string;
   type: string;
   image: string;
@@ -16,6 +18,7 @@ interface CarCardProps {
 }
 
 export const CarCard: FC<CarCardProps> = ({
+  id,
   name,
   type,
   image,
@@ -24,6 +27,7 @@ export const CarCard: FC<CarCardProps> = ({
   spending,
   className,
 }) => {
+  const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -80,6 +84,7 @@ export const CarCard: FC<CarCardProps> = ({
           ${price}/ <span className="text-sm text-gray-400 ">day</span>
         </p>
         <Button
+          onClick={() => router.push(`/catalog/${id}`)}
           variant="default"
           className="md:w-[120px] w-[100px] rounded-[4px] bg-blue-600 md:h-[44px] h-[36px]"
         >
