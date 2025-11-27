@@ -21,6 +21,7 @@ export const RecomendationCar: FC = () => {
           <div className="w-full" key={Car.id}>
             <CarCard
               className="w-full h-full"
+              id={Car.id}
               name={Car.name}
               type={Car.type}
               image={Car.image}
@@ -36,6 +37,7 @@ export const RecomendationCar: FC = () => {
         {Cars.slice(0, 9).map((Car) => (
           <div key={Car.id}>
             <CarCard
+              id={Car.id}
               name={Car.name}
               type={Car.type}
               image={Car.image}

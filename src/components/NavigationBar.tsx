@@ -22,13 +22,13 @@ export const NavigationBar: FC = () => {
           />
           <Image
             className="absolute top-2 left-3"
-            src="./search.svg"
+            src="/search.svg"
             alt="search"
             height={24}
             width={24}
           />
           <Button className="absolute right-0" type="button" variant="ghost">
-            <Image src="./filter.svg" alt="filter" width={24} height={24} />
+            <Image src="/filter.svg" alt="filter" width={24} height={24} />
           </Button>
         </div>
       </div>
@@ -38,28 +38,28 @@ export const NavigationBar: FC = () => {
           size="icon"
           className="w-11 h-11 hidden lg:flex border-2 rounded-full"
         >
-          <Image src="./heart.svg" alt="heart" width={24} height={24} />
+          <Image src="/heart.svg" alt="heart" width={24} height={24} />
         </Button>
         <Button
           variant="ghost"
           size="icon"
           className="w-11 h-11 hidden lg:flex border-2 rounded-full"
         >
-          <Image src="./notification.svg" alt="heart" width={24} height={24} />
+          <Image src="/notification.svg" alt="heart" width={24} height={24} />
         </Button>
         <Button
           variant="ghost"
           size="icon"
           className="w-11 h-11 hidden lg:flex border-2 rounded-full"
         >
-          <Image src="./setting.svg" alt="heart" width={24} height={24} />
+          <Image src="/setting.svg" alt="heart" width={24} height={24} />
         </Button>
         <Button
           variant="ghost"
           size="icon"
           className="w-11 h-11 scale-[0.7] lg:scale-none border-2 rounded-full"
         >
-          <Image src="./profile.svg" alt="heart" width={24} height={24} />
+          <Image src="/profile.svg" alt="heart" width={24} height={24} />
         </Button>
       </div>
     </nav>

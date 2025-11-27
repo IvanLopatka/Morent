@@ -18,6 +18,7 @@ export const PopularCar: FC = () => {
         {Cars.slice(0, 4).map((Car) => (
           <div key={Car.id}>
             <CarCard
+              id={Car.id}
               name={Car.name}
               type={Car.type}
               image={Car.image}
