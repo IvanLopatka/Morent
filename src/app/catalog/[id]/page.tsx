@@ -8,6 +8,7 @@ import { RecomendationCar } from "@/components";
 import { AboutUs } from "@/components";
 import { CarInfo } from "@/components";
 import { Cars } from "@/lib/Cars-data";
+import { Reviews } from "@/components";
 
 export default async function Home({ params }: { params: { id: string } }) {
   const id = (await params).id;
@@ -15,10 +16,10 @@ export default async function Home({ params }: { params: { id: string } }) {
   return (
     <div className="grid min-h-screen grid-rows-[auto_1fr_auto] items-start justify-center font-[family-name:var(--font-geist-sans)">
       <NavigationBar />
-
+      <MobileSearch />
       <div className="flex">
         <Sidebar />
-        <div className="flex-col ">
+        <div className="flex-col lg:p-8 p-6">
           <CarInfo
             id={id}
             name={""}
@@ -29,16 +30,10 @@ export default async function Home({ params }: { params: { id: string } }) {
             spending={""}
             description={""}
           />
+          <Reviews />
         </div>
       </div>
       <AboutUs />
-    </div>
-  );
-}
-function Loading() {
-  return (
-    <div>
-      <h1>Loading...</h1>
     </div>
   );
 }
