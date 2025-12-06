@@ -1,10 +1,5 @@
 import { MobileAd, NavigationBar, Sidebar } from "@/components";
 import { MobileSearch } from "@/components";
-import { RentalCarCard } from "@/components";
-import { CompareCars } from "@/components";
-import { PopularCar } from "@/components";
-import { MobilePopularCar } from "@/components";
-import { RecomendationCar } from "@/components";
 import { AboutUs } from "@/components";
 import { CarInfo } from "@/components";
 import { Cars } from "@/lib/Cars-data";

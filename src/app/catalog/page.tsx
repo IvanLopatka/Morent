@@ -10,7 +10,6 @@ export default function Home() {
   return (
     <div className="min-h-screen items-start justify-center font-[family-name:var(--font-geist-sans)">
       <NavigationBar />
-
       <MobileSearch />
       <div className="flex ">
         <Sidebar />
