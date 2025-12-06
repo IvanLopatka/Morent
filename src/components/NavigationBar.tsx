@@ -4,14 +4,17 @@ import { FC } from "react";
 import React from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 export const NavigationBar: FC = () => {
   return (
     <nav className="flex w-full px-6 lg:px-16  mb-0  lg:h-[124px] h-[96px] bg-white justify-between items-center">
       <div className="flex gap-16">
-        <h3 className="lg:text-[32px] text-2xl font-bold text-shadow text-blue-500">
-          MORENT
-        </h3>
+        <Link href="/">
+          <h3 className="lg:text-[32px] text-2xl font-bold text-shadow text-blue-500">
+            MORENT
+          </h3>
+        </Link>
         <div className="relative items-center hidden lg:flex">
           <Input
             className="pl-12  rounded-2xl text-2xl"
