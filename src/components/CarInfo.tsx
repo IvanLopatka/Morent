@@ -4,6 +4,7 @@ import { FC } from "react";
 import { Cars } from "@/lib/Cars-data";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 interface CarInfoProps {
   id: string;
@@ -16,16 +17,8 @@ interface CarInfoProps {
   description: string;
 }
 
-export const CarInfo: FC<CarInfoProps> = ({
-  id,
-  name,
-  type,
-  image,
-  price,
-  seats,
-  spending,
-  description,
-}) => {
+export const CarInfo: FC<CarInfoProps> = ({ id }) => {
+  const router = useRouter();
   const Stars = [1, 2, 3, 4, 5];
   const car = Cars.find((car) => car.id === id);
   const [isLiked, setIsLiked] = useState(false);
@@ -116,6 +109,7 @@ export const CarInfo: FC<CarInfoProps> = ({
             className="lg:h-[56px] lg:w-[140px] h-[44px] w-[100px] bg-blue-600"
             variant="default"
             size="default"
+            onClick={() => router.push(`/payment/${id}`)}
           >
             Rent Now
           </Button>
