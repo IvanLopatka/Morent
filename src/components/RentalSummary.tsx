@@ -12,16 +12,11 @@ interface RentalSummaryProps {
   price: string;
 }
 
-export const RentalSummary: React.FC<RentalSummaryProps> = ({
-  id,
-  name,
-  image,
-  price,
-}) => {
+export const RentalSummary: React.FC<RentalSummaryProps> = ({ id }) => {
   const car = Cars.find((car) => car.id === id);
   const rating = [1, 2, 3, 4, 5];
   return (
-    <div className="flex gap-8 flex-col bg-white rounded-lg p-6 lg:w-[35vw] w-full">
+    <div className="flex h-fit gap-8 flex-col bg-white rounded-lg p-6 lg:w-[35vw] w-full">
       <div className="flex gap-1 flex-col">
         <h1 className="text-2xl font-bold">Rental Summary</h1>
         <h2 className="text-sm font-medium text-gray-500">

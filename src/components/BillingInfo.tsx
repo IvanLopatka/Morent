@@ -31,8 +31,8 @@ export const BillingInfo: FC = () => {
           <span className="text-sm text-gray-500">Step 1 of 4</span>
         </div>
 
-        <div className="flex flex-row justify-between bg-white rounded-lg flex-wrap p-6 gap-4">
-          <div className="flex w-[45%] flex-col gap-4">
+        <div className="flex lg:flex-row gap-y-8 flex-col justify-between bg-white rounded-lg flex-wrap gap-4">
+          <div className="flex lg:w-[45%] w-full flex-col gap-y-4">
             <h1 className="text-xl font-bold">Name</h1>{" "}
             <Input
               type="text"
@@ -41,7 +41,7 @@ export const BillingInfo: FC = () => {
             />
           </div>
 
-          <div className="flex w-[45%] flex-col gap-4">
+          <div className="flex lg:w-[45%] w-full flex-col gap-y-4">
             <h1 className="text-xl font-bold">Town/City</h1>{" "}
             <Input
               type="text"
@@ -50,7 +50,7 @@ export const BillingInfo: FC = () => {
             />
           </div>
 
-          <div className="flex w-[45%] flex-col gap-4">
+          <div className="flex lg:w-[45%] w-full flex-col gap-y-4">
             <h1 className="text-xl font-bold">Phone number</h1>{" "}
             <Input
               type="text"
@@ -59,7 +59,7 @@ export const BillingInfo: FC = () => {
             />
           </div>
 
-          <div className="flex w-[45%] flex-col gap-4">
+          <div className="flex lg:w-[45%] w-full flex-col gap-y-4">
             <h1 className="text-xl font-bold">Address</h1>{" "}
             <Input
               type="text"
