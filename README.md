@@ -1,38 +1,101 @@
-# Morent
+# Morent - Car Rental Platform
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Morent is a modern, responsive car rental web application built with Next.js 15, TypeScript, and Tailwind CSS. It provides a seamless user experience for browsing, comparing, and renting vehicles.
 
-## Getting Started
+## 🚀 Features
 
-First, run the development server:
+-   **Car Catalog**: Browse a wide range of vehicles with filtering options.
+-   **Detailed Car Views**: Comprehensive information for each vehicle including specifications and images.
+-   **Responsive Design**: Fully optimized for both desktop and mobile devices.
+-   **Booking System**: Intuitive flow for selecting dates and booking vehicles.
+-   **Payment Integration**: Secure payment form layout (UI).
+-   **Car Comparison**: Feature to compare different car models side-by-side.
+-   **User Reviews**: Read and display user feedback.
+-   **Modern UI/UX**: clean, aesthetic design using modern web standards.
+
+## 🛠️ Tech Stack
+
+-   **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+-   **Language**: [TypeScript](https://www.typescriptlang.org/)
+-   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+-   **UI Components**: [Shadcn/ui](https://ui.shadcn.com/) (based on Radix UI)
+-   **State Management/Data Fetching**: [TanStack Query (React Query)](https://tanstack.com/query/latest)
+-   **Icons**: [Lucide React](https://lucide.dev/)
+-   **Forms & Validation**: React Hook Form (implied) / Custom forms
+-   **Utilities**: `date-fns`, `clsx`, `tailwind-merge`
+
+## 📦 Getting Started
+
+Follow these steps to set up the project locally:
+
+### Prerequisites
+
+-   Node.js (v18 or later recommended)
+-   npm, yarn, pnpm, or bun
+
+### Installation
+
+1.  **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/IvanLopatka/Morent.git
+    cd morent
+    ```
+
+2.  **Install dependencies:**
+
+    ```bash
+    npm install
+    # or
+    yarn install
+    # or
+    pnpm install
+    # or
+    bun install
+    ```
+
+3.  **Run the development server:**
+
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    # or
+    pnpm dev
+    # or
+    bun dev
+    ```
+
+4.  **Open your browser:**
+    Navigate to [http://localhost:3000](http://localhost:3000) to view the application.
+
+## 📂 Project Structure
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+src/
+├── app/              # Next.js App Router pages and layouts
+│   ├── catalog/      # Car catalog page
+│   ├── payment/      # Payment process page
+│   └── page.tsx      # Landing page
+├── components/       # Reusable React components
+│   ├── ui/           # Shared UI components (Button, Input, etc.)
+│   └── ...           # Feature-specific components (CarCard, RentalSummary, etc.)
+├── lib/              # Utility functions and mock data
+└── ...
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📜 Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+-   `dev`: Starts the development server with Turbopack.
+-   `build`: Builds the application for production.
+-   `start`: Starts the production server.
+-   `lint`: Runs ESLint to check for code quality issues.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 👤 Author
 
-## Learn More
+**Ivan Lopatka**
+-   GitHub: [@IvanLopatka](https://github.com/IvanLopatka)
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the [MIT License](LICENSE).
