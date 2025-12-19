@@ -96,6 +96,3 @@ src/
 **Ivan Lopatka**
 -   GitHub: [@IvanLopatka](https://github.com/IvanLopatka)
 
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
