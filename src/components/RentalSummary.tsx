@@ -8,7 +8,7 @@ import { Button } from "./ui/button";
 interface RentalSummaryProps {
   id: string;
   name: string;
-  image: string;
+  thumbnail: string;
   price: string;
 }
 
@@ -27,7 +27,7 @@ export const RentalSummary: React.FC<RentalSummaryProps> = ({ id }) => {
       <div className="flex flex-row">
         <div className="flex rounded-lg min-h-[148px] items-center justify-center bg-[url('/background.png')] bg-cover bg-center lg:w-1/2 w-full h-[50%] lg:h-full">
           <Image
-            src={car?.image || ""}
+            src={car?.thumbnail || ""}
             alt={car?.name || ""}
             width={116}
             height={36}

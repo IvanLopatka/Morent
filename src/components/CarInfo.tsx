@@ -26,20 +26,10 @@ interface CarInfoProps {
 
 export const CarInfo: FC<CarInfoProps> = ({ id }) => {
   const car = Cars.find((car) => car.id === id);
-  const images = [
-    {
-      original: car?.image,
-      thumbnail: car?.image,
-    },
-    {
-      original: car?.saloonImage1,
-      thumbnail: car?.saloonImage1,
-    },
-    {
-      original: car?.saloonImage2,
-      thumbnail: car?.saloonImage2,
-    },
-  ];
+  const images = car?.gallery.map((image) => ({
+    original: image,
+    thumbnail: image,
+  }));
 
   const router = useRouter();
   const Stars = [1, 2, 3, 4, 5];
@@ -54,7 +44,7 @@ export const CarInfo: FC<CarInfoProps> = ({ id }) => {
   };
   return (
     <div className="flex lg:flex-row mb-8 flex-col w-full gap-y-8 lg:justify-between ">
-      <div className="lg:w-[47%] pl-4 flex lg:h-max-content lg:justify-center items-center  px-4 w-full rounded-lg">
+      <div className="lg:w-[47%] pl-4 flex h-fit min-h-[300px] lg:justify-center items-center px-4 w-full rounded-lg">
         
         
         <ImageGallery
@@ -66,11 +56,10 @@ export const CarInfo: FC<CarInfoProps> = ({ id }) => {
           showFullscreenButton={false}
           showPlayButton={false}
           thumbnailPosition="bottom"
-          originalClass="max-h-[250px] w-full items-center"
-          thumbnailClass="w-full absolute bottom-0"
-          thumbnailContainerClass="w-full absolute bottom-0"
+
+          thumbnailClass="bg-green-300 h-[600px]"
           items={images}
-          additionalClass="max-h-[250px] mb-40 w-full items-center "
+          
         />
         
       </div>

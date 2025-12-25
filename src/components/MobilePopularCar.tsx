@@ -21,7 +21,7 @@ export const MobilePopularCar: FC = () => {
               id={car.id}
               name={car.name}
               type={car.type}
-              image={car.image}
+              image={car.thumbnail}
               price={car.price}
               seats={car.seats}
               spending={car.spending}

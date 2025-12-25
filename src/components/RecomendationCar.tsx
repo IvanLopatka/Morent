@@ -24,7 +24,7 @@ export const RecomendationCar: FC = () => {
               id={Car.id}
               name={Car.name}
               type={Car.type}
-              image={Car.image}
+              image={Car.thumbnail}
               price={Car.price}
               seats={Car.seats}
               spending={Car.spending}
@@ -40,7 +40,7 @@ export const RecomendationCar: FC = () => {
               id={Car.id}
               name={Car.name}
               type={Car.type}
-              image={Car.image}
+              image={Car.thumbnail}
               price={Car.price}
               seats={Car.seats}
               spending={Car.spending}
