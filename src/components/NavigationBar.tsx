@@ -5,8 +5,19 @@ import React from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+
+import { useState } from "react";
+import { AuthModal } from "../app/auth/AuthModal";
 
 export const NavigationBar: FC = () => {
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authView, setAuthView] = useState<"login" | "register">("login");
+
+  const openAuth = (view: "login" | "register") => {
+    setAuthView(view);
+    setIsAuthModalOpen(true);
+  };
   return (
     <nav className="flex w-full px-6 lg:px-16  mb-0  lg:h-[124px] h-[96px] bg-white justify-between items-center">
       <div className="flex gap-16">
@@ -57,14 +68,46 @@ export const NavigationBar: FC = () => {
         >
           <Image src="/setting.svg" alt="heart" width={24} height={24} />
         </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="w-11 h-11 scale-[0.7] lg:scale-none border-2 rounded-full"
-        >
-          <Image src="/profile.svg" alt="heart" width={24} height={24} />
-        </Button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="w-11 h-11 scale-[0.7] lg:scale-none border-2 rounded-full"
+            >
+              <Image src="/profile.svg" alt="heart" width={24} height={24} />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[400px]">
+            <div className="w-full flex flex-col h-full p-4">
+              <h3 className="text-xl font-semibold">Login or Register in your account</h3>
+              <div className="flex flex-row gap-2 mt-2">
+                <Button 
+                  className="w-1/2" 
+                  size="lg" 
+                  variant="outline"
+                  onClick={() => openAuth("login")}
+                >
+                  Login
+                </Button>
+                <Button 
+                  className="w-1/2" 
+                  size="lg" 
+                  variant="default"
+                  onClick={() => openAuth("register")}
+                >
+                  Register
+                </Button>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+        defaultView={authView} 
+      />
     </nav>
   );
 };
