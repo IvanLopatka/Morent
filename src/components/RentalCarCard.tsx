@@ -1,8 +1,11 @@
+'use client';
 import React from "react";
 import { FC } from "react";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 export const RentalCarCard: FC = () => {
+  const router = useRouter();
   return (
     <div className="lg:flex hidden px-16 mt-8 gap-8 mb-8 justify-center ">
       <div className="w-full bg-cover h-[360px] bg-bottom rounded-[10px] bg-[url('/left-ad.png')]">
@@ -17,6 +20,7 @@ export const RentalCarCard: FC = () => {
           <Button
             variant="default"
             className="w-[120px] rounded-[4px] bg-blue-600 h-[44px]"
+            onClick={() => router.push("/catalog")}
           >
             Rental Car
           </Button>
@@ -35,6 +39,7 @@ export const RentalCarCard: FC = () => {
           <Button
             variant="default"
             className="w-[120px] rounded-[4px] bg-blue-400 h-[44px]"
+            onClick={() => router.push("/catalog")}
           >
             Rental Car
           </Button>
