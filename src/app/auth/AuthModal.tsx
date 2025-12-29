@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { supabase } from "@/lib/supabase-client";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -34,6 +35,7 @@ export const AuthModal = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would handle the actual authentication logic
+    
     console.log(`Submitting ${view} form`);
     onClose();
   };
