@@ -7,12 +7,26 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AuthModal } from "../app/auth/AuthModal";
+import { supabase } from "@/lib/supabase-client";
 
 export const NavigationBar: FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authView, setAuthView] = useState<"login" | "register">("login");
+  const [session, setSession] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const openAuth = (view: "login" | "register") => {
     setAuthView(view);
@@ -68,40 +82,51 @@ export const NavigationBar: FC = () => {
         >
           <Image src="/setting.svg" alt="heart" width={24} height={24} />
         </Button>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="w-11 h-11 scale-[0.7] lg:scale-none border-2 rounded-full"
-            >
-              <Image src="/profile.svg" alt="heart" width={24} height={24} />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-[400px]">
-            <div className="w-full flex flex-col h-full p-4">
-              <h3 className="text-xl font-semibold">Login or Register in your account</h3>
-              <div className="flex flex-row gap-2 mt-2">
-                <Button 
-                  className="w-1/2" 
-                  size="lg" 
-                  variant="outline"
-                  onClick={() => openAuth("login")}
-                >
-                  Login
-                </Button>
-                <Button 
-                  className="w-1/2" 
-                  size="lg" 
-                  variant="default"
-                  onClick={() => openAuth("register")}
-                >
-                  Register
-                </Button>
+        {session ? (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-11 h-11 scale-[0.7] lg:scale-none border-2 rounded-full"
+            onClick={() => setIsAuthModalOpen(true)}
+          >
+            <Image src="/profile.svg" alt="profile" width={24} height={24} />
+          </Button>
+        ) : (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="w-11 h-11 scale-[0.7] lg:scale-none border-2 rounded-full"
+              >
+                <Image src="/profile.svg" alt="profile" width={24} height={24} />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[400px]">
+              <div className="w-full flex flex-col h-full p-4">
+                <h3 className="text-xl font-semibold">Login or Register in your account</h3>
+                <div className="flex flex-row gap-2 mt-2">
+                  <Button 
+                    className="w-1/2" 
+                    size="lg" 
+                    variant="outline"
+                    onClick={() => openAuth("login")}
+                  >
+                    Login
+                  </Button>
+                  <Button 
+                    className="w-1/2" 
+                    size="lg" 
+                    variant="default"
+                    onClick={() => openAuth("register")}
+                  >
+                    Register
+                  </Button>
+                </div>
               </div>
-            </div>
-          </PopoverContent>
-        </Popover>
+            </PopoverContent>
+          </Popover>
+        )}
       </div>
       <AuthModal 
         isOpen={isAuthModalOpen} 

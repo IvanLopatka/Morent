@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase-client";
 import { FormEvent } from "react";
+import router from "next/router";
 
 interface AuthModalProps {
   
@@ -29,6 +30,7 @@ export const AuthModal = ({
 }: AuthModalProps) => {
   const [error, setError] = useState<string | null>(null);
   const [session, setSession] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [view, setView] = useState<"login" | "register">(defaultView);
   const [formData, setFormData] = useState({
     name: "",
@@ -43,9 +45,19 @@ export const AuthModal = ({
   }, [isOpen, defaultView]);
 
   useEffect(() => {
-   const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const getInitialSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
       setSession(session);
+      setLoading(false);
+    };
+
+    getInitialSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      setLoading(false);
     });
+
     return () => subscription.unsubscribe();
   }, []);
 
@@ -79,7 +91,7 @@ export const AuthModal = ({
       }
     }
     
-    // onClose(); // Optional: close on success, or let the user see the profile view
+    
   };
 
   const handleSignOut = async () => {
@@ -87,35 +99,44 @@ export const AuthModal = ({
     onClose();
   };
 
+  if (loading && isOpen) return null;
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        {session ? (
-            <>
-                <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold text-center">
-                        Account
-                    </DialogTitle>
-                    <DialogDescription className="text-center">
-                        You are currently signed in.
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="flex flex-col items-center gap-4 py-4">
-                    <div className="text-center">
-                        <p className="font-semibold">{session.user.user_metadata?.full_name || "User"}</p>
-                        <p className="text-sm text-gray-500">{session.user.email}</p>
-                    </div>
-                    <Button 
-                        onClick={handleSignOut} 
-                        variant="destructive"
-                        className="w-full"
-                    >
-                        Sign Out
-                    </Button>
-                </div>
-            </>
-        ) : (
-            <>
+      {session ? (
+        <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-center">
+                Account
+            </DialogTitle>
+            <DialogDescription className="text-center">
+                You are currently signed in.
+            </DialogDescription>
+        </DialogHeader>
+        <div className="flex flex-col items-center gap-4 py-4">
+            <div className="text-center">
+                <p className="font-semibold">{session.user.user_metadata?.full_name || "User"}</p>
+                <p className="text-sm text-gray-500">{session.user.email}</p>
+            </div>
+            <Button 
+                onClick={handleSignOut} 
+                variant="destructive"
+                className="w-full"
+            >
+                Sign Out
+            </Button>
+            <Button 
+                onClick={() => router.push("/profile")} 
+                variant="default"
+                className="w-full bg-blue-500"
+            >
+                View Profile
+            </Button>
+        </div>
+        </DialogContent>
+      ) : (
+      
+            <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                 <DialogTitle className="text-2xl font-bold text-center">
                     {view === "login" ? "Welcome Back" : "Create Account"}
@@ -227,9 +248,8 @@ export const AuthModal = ({
                     </p>
                 )}
                 </div>
-            </>
+            </DialogContent>
         )}
-      </DialogContent>
     </Dialog>
   );
 };

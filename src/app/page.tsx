@@ -1,3 +1,4 @@
+"use client";
 import { MobileAd, NavigationBar } from "@/components";
 import { MobileSearch } from "@/components";
 import { RentalCarCard } from "@/components";

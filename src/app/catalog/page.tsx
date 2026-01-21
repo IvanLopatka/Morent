@@ -1,3 +1,4 @@
+"use client";
 import { NavigationBar } from "@/components";
 import { MobileSearch } from "@/components";
 import { CompareCars } from "@/components";

@@ -13,15 +13,6 @@ import { useRouter } from "next/navigation";
 
 interface CarInfoProps {
   id: string;
-  name: string;
-  type: string;
-  image: string;
-  saloonImage1: string;
-  saloonImage2: string;
-  price: string;
-  seats: string;
-  spending: string;
-  description: string;
 }
 
 export const CarInfo: FC<CarInfoProps> = ({ id }) => {

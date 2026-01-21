@@ -1,3 +1,4 @@
+
 import { MobileAd, NavigationBar, Sidebar } from "@/components";
 import { MobileSearch } from "@/components";
 import { AboutUs } from "@/components";
@@ -17,13 +18,6 @@ export default async function Home({ params }: { params: { id: string } }) {
         <div className="flex-col lg:p-8 p-6">
           <CarInfo
             id={id}
-            name={""}
-            type={""}
-            image={""}
-            price={""}
-            seats={""}
-            spending={""}
-            description={""}
           />
           <Reviews />
         </div>
