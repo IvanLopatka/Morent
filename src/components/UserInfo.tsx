@@ -1,7 +1,8 @@
 
-import { supabase } from "@/lib/supabase-client";
-
-import Image from "next/image";
+import { useAuthStore } from "@/store/auth.store";
+import Image from "next/image"; 
+import { cookies } from "next/headers";
+import { createBrowserClient } from '@supabase/ssr'
 
 interface UserInfoProps {
     id: string;
@@ -10,8 +11,18 @@ interface UserInfoProps {
 
 
 export const UserInfo = async ({ id }: UserInfoProps) => {
+const supabase = await createBrowserClient();
+const session = await useAuthStore.getState().session;
+console.log("WHERE I AM");
+
+if (!session) {
+  console.log("No session")
+  return
+}
    const { data: profile, error} = await supabase.from("profiles").select("*").eq("id", id).single();
+   console.log(profile);
     
+   if(error) { console.log(error); return <div>Error loading profile</div>;}
     
     return (
       <div className="flex flex-col w-full p-8 items-start gap-4">
