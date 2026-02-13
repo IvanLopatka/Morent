@@ -9,7 +9,7 @@ export const ConfirmationForm = () => {
   return (
     <div className="flex flex-col lg:w-[60vw] w-full gap-4">
       <div className="flex flex-col bg-white rounded-lg p-6 gap-8">
-        {/* Header */}
+        
         <div className="flex flex-row items-end justify-between gap-4">
           <div className="flex flex-col gap-2">
             <h1 className="text-2xl font-bold text-[#1A202C]">Confirmation</h1>
@@ -20,7 +20,7 @@ export const ConfirmationForm = () => {
           <span className="text-sm text-[#90A3BF]">Step 4 of 4</span>
         </div>
 
-        {/* Checkboxes */}
+        
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-4 rounded-lg bg-[#F6F7F9] p-4">
             <Checkbox id="marketing" className="size-6 border-[#90A3BF] data-[state=checked]:bg-[#3563E9] rounded-md" />
@@ -43,14 +43,14 @@ export const ConfirmationForm = () => {
           </div>
         </div>
 
-        {/* Button */}
+        
         <div>
           <Button className="h-[56px] px-8 bg-[#3563E9] text-white text-base font-bold hover:bg-[#3563E9]/90 rounded-lg">
             Rent Now
           </Button>
         </div>
 
-        {/* Footer */}
+        
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <ShieldCheck className="size-8 text-[#1A202C]" />
