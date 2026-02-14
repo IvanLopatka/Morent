@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,25 +12,23 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { supabase } from "@/lib/supabase-client";
-import { FormEvent } from "react";
-import router from "next/router";
+import { AuthService } from "@/lib/auth.service";
+import { useAuthStore } from "@/store/auth.store";
 
 interface AuthModalProps {
-  
   isOpen: boolean;
   onClose: () => void;
   defaultView?: "login" | "register";
 }
 
 export const AuthModal = ({
-  
   isOpen,
   onClose,
   defaultView = "login",
 }: AuthModalProps) => {
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const [session, setSession] = useState<any>(null);
+  const { session, setSession } = useAuthStore();
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<"login" | "register">(defaultView);
   const [formData, setFormData] = useState({
@@ -46,14 +45,14 @@ export const AuthModal = ({
 
   useEffect(() => {
     const getInitialSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await AuthService.getSession();
       setSession(session);
       setLoading(false);
     };
 
     getInitialSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = AuthService.onAuthStateChange((_event, session) => {
       setSession(session);
       setLoading(false);
     });
@@ -65,37 +64,33 @@ export const AuthModal = ({
     e.preventDefault();
    
     if (view === "register") {
-      const { error: signUpError } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-            data: {
-                full_name: formData.name,
-            }
-        }
-      })
+      const { error: signUpError } = await AuthService.signUp(
+        formData.email,
+        formData.password,
+        formData.name
+      );
+      
       if (signUpError) {
         console.error("Sign up error:", signUpError.message);
         setError(signUpError.message);
-        return
+        return;
       }
     } else {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      })
+      const { error: signInError } = await AuthService.signIn(
+        formData.email,
+        formData.password
+      );
+
       if (signInError) {
         console.error("Sign in error:", signInError.message);
         setError(signInError.message);
-        return
+        return;
       }
     }
-    
-    
   };
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    await AuthService.signOut();
     onClose();
   };
 
@@ -120,13 +115,14 @@ export const AuthModal = ({
             </div>
             <Button 
                 onClick={handleSignOut} 
+                
                 variant="destructive"
                 className="w-full"
             >
                 Sign Out
             </Button>
             <Button 
-                onClick={() => router.push("/profile")} 
+                onClick={() => router.push("/profile/" + session.user.id)} 
                 variant="default"
                 className="w-full bg-blue-500"
             >

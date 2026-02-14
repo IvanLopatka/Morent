@@ -2,6 +2,7 @@ import React from "react";
 import { FC } from "react";
 import Link from "next/link";
 
+
 export const AboutUs: FC = () => {
   return (
     <div className="w-screen bg-white pt-16 pb-10 px-6 lg:px-16">
