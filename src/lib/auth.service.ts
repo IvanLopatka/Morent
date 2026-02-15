@@ -1,5 +1,7 @@
-import { supabase } from "@/lib/supabase-client";
+import { createClient } from "@/utils/supabase/client";
 import { AuthError, Session, User } from "@supabase/supabase-js";
+
+const supabase = createClient();
 
 export type AuthResponse = {
   data: {

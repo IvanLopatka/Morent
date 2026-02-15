@@ -1,5 +1,5 @@
 import { NavigationBar } from "@/components";
-import { UserInfo } from "@/components";
+import { UserInfo } from "@/components/UserInfo";
 import { AboutUs } from "@/components";
 import { createClient } from "@/utils/supabase/server";
 

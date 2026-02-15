@@ -1,6 +1,7 @@
 
 import { createClient } from "@/utils/supabase/server";
-import Image from "next/image";
+import { UserInfoUI } from "./UserInfoUI";
+import { redirect } from "next/navigation";
 
 interface UserInfoProps {
   id: string;
@@ -8,31 +9,24 @@ interface UserInfoProps {
 
 export const UserInfo = async ({ id }: UserInfoProps) => {
   const supabase = await createClient();
-  
 
-  // Check if session exists (though we primarily need the profile by ID)
+  // Securely get the user from the auth token
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  const {
-  data: { user },
-} = await supabase.auth.getUser();
-
-
-if (!user) {
-  return <div>Not authenticated</div>;
-}
-
-  if (!session) {
-    // You might want to redirect here if this page is protected
-    // redirect('/login');
-    console.log("No session");
-     // return <div>Please log in</div>; // Optional: Enforce login
+  // If no user is authenticated, redirect to login or show error
+  if (!user) {
+    return (
+      <div className="p-8 text-center text-red-500 font-semibold">
+        Not authenticated. Please log in.
+      </div>
+    );
   }
 
-  // Fetch the profile matching the [id] from the URL
-  
+  // Security check: If the URL ID doesn't match the authenticated user ID,
+  // we could redirect or just show the user's own profile. 
+  // Using user.id directly ensures they can only see THEIR data.
   const { data: profile, error } = await supabase
     .from("profiles")
     .select("*")
@@ -40,32 +34,10 @@ if (!user) {
     .single();
 
   if (error) {
-    console.error(error);
-    return <div>Error loading profile</div>;
+    console.error("Error fetching profile:", error);
+    return <div className="p-8 text-center">Error loading profile data.</div>;
   }
 
-  return (
-    <div className="flex flex-col w-full p-8 items-start gap-4">
-      <h1 className="text-4xl font-bold text-center">My Profile</h1>
-      <p className="text-center">
-        Welcome to your profile, here you can manage your account
-      </p>
-      <div className="flex flex-col w-full items-center gap-4">
-        <div className="flex flex-row w-full p-4 rounded-lg bg-white items-center gap-4">
-          <Image
-            src={profile?.avatar_url || "/profile.svg"}
-            alt="profile"
-            width={50}
-            height={50}
-            className="rounded-full"
-          />
-
-          <div className="flex flex-col items-center gap-2">
-            <p className="font-semibold">{profile?.full_name}</p>
-            <p className="text-sm text-gray-500">{profile?.email}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  // Pass the authorized profile data to the Client Component layout
+  return <UserInfoUI profile={profile} />;
 };

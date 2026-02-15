@@ -87,10 +87,15 @@ export const AuthModal = ({
         return;
       }
     }
+
+    // Success: Refresh the page to update Server Components and close the modal
+    router.refresh();
+    onClose();
   };
 
   const handleSignOut = async () => {
     await AuthService.signOut();
+    router.refresh();
     onClose();
   };
 
