@@ -12,7 +12,7 @@ export default function Home() {
     <div className="min-h-screen items-start justify-center font-[family-name:var(--font-geist-sans)">
       <NavigationBar />
       <MobileSearch />
-      <div className="flex ">ф
+      <div className="flex">
         <Sidebar />
         <div className="flex-col">
           <CompareCars gapVariant="catalog" widthVariant="catalog" />
