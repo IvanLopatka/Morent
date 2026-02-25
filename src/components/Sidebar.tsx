@@ -5,126 +5,126 @@ import { Slider } from "./ui/slider";
 import { Checkbox } from "./ui/checkbox";
 import { Cars } from "@/lib/Cars-data";
 
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+
 export const Sidebar = () => {
-  const [maxPrice, setMaxPrice] = React.useState<number[]>([100]);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  // Initialize state from URL
+  const selectedTypes = searchParams.get("type")?.split(",") || [];
+  const selectedCapacities = searchParams.get("capacity")?.split(",") || [];
+  const initialPrice = parseInt(searchParams.get("price") || "100");
+  const [maxPrice, setMaxPrice] = React.useState<number[]>([initialPrice]);
+
+  const updateFilters = (key: string, value: string, checked: boolean) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const currentValues = params.get(key)?.split(",") || [];
+
+    if (checked) {
+      if (!currentValues.includes(value)) {
+        currentValues.push(value);
+      }
+    } else {
+      const index = currentValues.indexOf(value);
+      if (index > -1) {
+        currentValues.splice(index, 1);
+      }
+    }
+
+    if (currentValues.length > 0 && currentValues[0] !== "") {
+      params.set(key, currentValues.join(","));
+    } else {
+      params.delete(key);
+    }
+
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const updatePriceFilter = (value: number[]) => {
+    setMaxPrice(value);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("price", value[0].toString());
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const types = [
+    { id: "sport", label: "Sport", value: "Sportscar" },
+    { id: "suv", label: "SUV", value: "SUV" },
+    { id: "mpv", label: "MPV", value: "MPV" },
+    { id: "sedan", label: "Sedan", value: "Sedan" },
+    { id: "coupe", label: "Coupe", value: "Coupe" },
+    { id: "hatchback", label: "Hatchback", value: "Hatchback" },
+  ];
+
+  const capacities = [
+    { id: "2-person", label: "2 Person", value: "2" },
+    { id: "4-person", label: "4 Person", value: "4" },
+    { id: "6-person", label: "6 Person", value: "6" },
+    { id: "8-or-more", label: "8 or More", value: "8" },
+  ];
+
   return (
     <div className="lg:flex hidden px-8 flex-col items-center border-y border-gray-100 bg-white justify-center self-stretch ">
       <div className="pl-4 flex flex-col mt-12 gap-12 w-[360px] h-full ">
         <div className="flex flex-col gap-8">
           <p className="text-base text-gray-500 font-semibold">Type</p>
-          <div className="flex items-center gap-2">
-            <Checkbox id="sport" />
-            <Label htmlFor="sport">
-              <span className="text-xl text-gray-500 font-semibold">Sport</span>
-              <span className="text-xl text-gray-400 font-semibold">
-                ({Cars.filter((car) => car.type === "Sportscar").length})
-              </span>
-            </Label>
-          </div>
-          <div className="flex items-center gap-2">
-            <Checkbox id="suv" />
-            <Label htmlFor="suv">
-              <span className="text-xl text-gray-500 font-semibold">SUV</span>
-              <span className="text-xl text-gray-400 font-semibold">
-                ({Cars.filter((car) => car.type === "SUV").length})
-              </span>
-            </Label>
-          </div>
-          <div className="flex items-center gap-2">
-            <Checkbox id="mpv" />
-            <Label htmlFor="mpv">
-              <span className="text-xl text-gray-500 font-semibold">MPV</span>
-              <span className="text-xl text-gray-400 font-semibold">
-                ({Cars.filter((car) => car.type === "MPV").length})
-              </span>
-            </Label>
-          </div>
-          <div className="flex items-center gap-2">
-            <Checkbox id="sedan" />
-            <Label htmlFor="sedan">
-              <span className="text-xl text-gray-500 font-semibold">Sedan</span>
-              <span className="text-xl text-gray-400 font-semibold">
-                ({Cars.filter((car) => car.type === "Sedan").length})
-              </span>
-            </Label>
-          </div>
-          <div className="flex items-center gap-2">
-            <Checkbox id="coupe" />
-            <Label htmlFor="coupe">
-              <span className="text-xl text-gray-500 font-semibold">Coupe</span>
-              <span className="text-xl text-gray-400 font-semibold">
-                ({Cars.filter((car) => car.type === "Coupe").length})
-              </span>
-            </Label>
-          </div>
-          <div className="flex items-center gap-2">
-            <Checkbox id="hatchback" />
-            <Label htmlFor="hatchback">
-              <span className="text-xl text-gray-500 font-semibold">
-                Hatchback
-              </span>{" "}
-              <span className="text-xl text-gray-400 font-semibold">
-                ({Cars.filter((car) => car.type === "Hatchback").length})
-              </span>
-            </Label>
-          </div>
+          {types.map((type) => (
+            <div className="flex items-center gap-2" key={type.id}>
+              <Checkbox
+                id={type.id}
+                checked={selectedTypes.includes(type.value)}
+                onCheckedChange={(checked) =>
+                  updateFilters("type", type.value, checked as boolean)
+                }
+              />
+              <Label htmlFor={type.id}>
+                <span className="text-xl text-gray-500 font-semibold">
+                  {type.label}
+                </span>
+                <span className="text-xl text-gray-400 font-semibold ml-1">
+                  ({Cars.filter((car) => car.type === type.value).length})
+                </span>
+              </Label>
+            </div>
+          ))}
         </div>
+
         <div className="flex flex-col gap-8">
           <p className="text-base text-gray-500 font-semibold">Capacity</p>
-          <div className="flex items-center gap-2">
-            <Checkbox id="2-person" />
-            <Label htmlFor="2-person">
-              <span className="text-xl text-gray-500 font-semibold">
-                2 Person
-              </span>{" "}
-              <span className="text-xl text-gray-400 font-semibold">
-                ({Cars.filter((car) => car.seats === "2").length})
-              </span>
-            </Label>
-          </div>
-          <div className="flex items-center gap-2">
-            <Checkbox id="4-person" />
-            <Label htmlFor="4-person">
-              <span className="text-xl text-gray-500 font-semibold">
-                4 Person
-              </span>{" "}
-              <span className="text-xl text-gray-400 font-semibold">
-                ({Cars.filter((car) => car.seats === "4").length})
-              </span>
-            </Label>
-          </div>
-          <div className="flex items-center gap-2">
-            <Checkbox id="6-person" />
-            <Label htmlFor="6-person">
-              <span className="text-xl text-gray-500 font-semibold">
-                6 Person
-              </span>{" "}
-              <span className="text-xl text-gray-400 font-semibold">
-                ({Cars.filter((car) => car.seats === "6").length})
-              </span>
-            </Label>
-          </div>
-          <div className="flex items-center gap-2">
-            <Checkbox id="8-or-more" />
-            <Label htmlFor="8-or-more">
-              <span className="text-xl text-gray-500 font-semibold">
-                8 or More
-              </span>
-              <span className="text-xl text-gray-400 font-semibold">
-                ({Cars.filter((car) => car.seats === "8").length})
-              </span>
-            </Label>
-          </div>
+          {capacities.map((cap) => (
+            <div className="flex items-center gap-2" key={cap.id}>
+              <Checkbox
+                id={cap.id}
+                checked={selectedCapacities.includes(cap.value)}
+                onCheckedChange={(checked) =>
+                  updateFilters("capacity", cap.value, checked as boolean)
+                }
+              />
+              <Label htmlFor={cap.id}>
+                <span className="text-xl text-gray-500 font-semibold">
+                  {cap.label}
+                </span>
+                <span className="text-xl text-gray-400 font-semibold ml-1">
+                  ({Cars.filter((car) => {
+                    if (cap.value === "8") return parseInt(car.seats) >= 8;
+                    return car.seats === cap.value;
+                  }).length})
+                </span>
+              </Label>
+            </div>
+          ))}
         </div>
+
         <div className="flex h-5 flex-col gap-8">
           <p className="text-base text-gray-500 font-semibold">Price</p>
           <Slider
             className="h-full"
-            defaultValue={[100]}
             max={100}
             step={1}
             value={maxPrice}
-            onValueChange={setMaxPrice}
+            onValueChange={updatePriceFilter}
           />
 
           <div className="text-base text-gray-500 font-semibold">

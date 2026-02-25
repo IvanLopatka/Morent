@@ -7,6 +7,7 @@ import { PopularCar } from "@/components";
 import { MobilePopularCar } from "@/components";
 import { RecomendationCar } from "@/components";
 import { AboutUs } from "@/components";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -18,7 +19,9 @@ export default function Home() {
       <CompareCars gapVariant="default" widthVariant="default" />
       <PopularCar />
       <MobilePopularCar />
-      <RecomendationCar />
+      <Suspense fallback={<div>Loading...</div>}>
+        <RecomendationCar />
+      </Suspense>
       <AboutUs />
     </div>
   );
