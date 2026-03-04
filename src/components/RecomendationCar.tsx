@@ -1,11 +1,11 @@
 "use client";
 
-import { Cars } from "@/lib/Cars-data";
 import { CarCard } from "./CarCard";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { filterCars } from "@/lib/filter-utils";
+import { CarService, Car } from "@/lib/car.service";
 
 interface RecomendationCarProps {
   gridVariant?: "default" | "catalog";
@@ -14,6 +14,18 @@ interface RecomendationCarProps {
 export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "default" }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [cars, setCars] = useState<Car[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      setIsLoading(true);
+      const data = await CarService.getAllCars();
+      setCars(data);
+      setIsLoading(false);
+    };
+    fetchCars();
+  }, []);
 
   // Parse filters from URL
   const filters = {
@@ -22,7 +34,11 @@ export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "def
     maxPrice: parseInt(searchParams.get("price") || "100"),
   };
 
-  const filteredCars = filterCars(Cars, filters);
+  const filteredCars = filterCars(cars, filters);
+
+  if (isLoading) {
+    return <div className="px-5 md:px-16 mt-8 mb-12 text-center text-gray-500">Loading cars...</div>;
+  }
 
   return (
     <div className="px-5 md:px-16 mt-8 mb-12 md:mb-16">

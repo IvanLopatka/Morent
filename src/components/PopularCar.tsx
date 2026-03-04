@@ -1,9 +1,25 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { FC } from "react";
-import { Cars } from "@/lib/Cars-data";
 import { CarCard } from "./CarCard";
+import { CarService, Car } from "@/lib/car.service";
 
 export const PopularCar: FC = () => {
+  const [cars, setCars] = useState<Car[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      const data = await CarService.getAllCars();
+      setCars(data);
+      setIsLoading(false);
+    };
+    fetchCars();
+  }, []);
+
+  if (isLoading) return null;
+
   return (
     <div className="px-5 md:px-16 w-screen mb-0 md:mb-8">
       <div className="flex px-4 justify-between items-center mb-5">
@@ -15,7 +31,7 @@ export const PopularCar: FC = () => {
         </p>
       </div>
       <div className="hidden lg:flex justify-between">
-        {Cars.slice(0, 4).map((Car) => (
+        {cars.slice(0, 4).map((Car) => (
           <div key={Car.id}>
             <CarCard
               id={Car.id}
