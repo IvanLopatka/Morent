@@ -63,17 +63,17 @@ export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "def
         <>
           {/* Mobile: show first 5 of filtered */}
           <div className="flex lg:hidden flex-wrap gap-y-8 justify-center">
-            {filteredCars.slice(0, 5).map((Car) => (
-              <div className="w-full" key={Car.id}>
+            {filteredCars.slice(0, 5).map((car) => (
+              <div className="w-full" key={car.id}>
                 <CarCard
                   className="w-full h-full"
-                  id={Car.id}
-                  name={Car.name}
-                  type={Car.type}
-                  image={Car.thumbnail}
-                  price={Car.price}
-                  seats={Car.seats}
-                  spending={Car.spending}
+                  id={car.id}
+                  name={car.name}
+                  type={car.type}
+                  image={car.thumbnail}
+                  price={car.price}
+                  seats={car.seats}
+                  spending={car.spending}
                 />
               </div>
             ))}
@@ -87,16 +87,16 @@ export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "def
                 : "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             }`
           }>
-            {filteredCars.slice(0, gridVariant === "catalog" ? 9 : 8).map((Car) => (
-              <div key={Car.id} className="flex justify-center">
+            {filteredCars.slice(0, gridVariant === "catalog" ? 9 : 8).map((car) => (
+              <div key={car.id} className="flex justify-center">
                 <CarCard
-                  id={Car.id}
-                  name={Car.name}
-                  type={Car.type}
-                  image={Car.thumbnail}
-                  price={Car.price}
-                  seats={Car.seats}
-                  spending={Car.spending}
+                  id={car.id}
+                  name={car.name}
+                  type={car.type}
+                  image={car.thumbnail}
+                  price={car.price}
+                  seats={car.seats}
+                  spending={car.spending}
                 />
               </div>
             ))}

@@ -1,5 +1,6 @@
-import React from "react";
-import { Cars } from "@/lib/Cars-data";
+"use client";
+import React, { useEffect, useState } from "react";
+import { CarService, Car } from "@/lib/car.service";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
@@ -7,14 +8,27 @@ import { Button } from "./ui/button";
 
 interface RentalSummaryProps {
   id: string;
-  name: string;
-  thumbnail: string;
-  price: string;
 }
 
 export const RentalSummary: React.FC<RentalSummaryProps> = ({ id }) => {
-  const car = Cars.find((car) => car.id === id);
+  const [car, setCar] = useState<Car | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCar = async () => {
+      setIsLoading(true);
+      const data = await CarService.getCarById(id);
+      setCar(data);
+      setIsLoading(false);
+    };
+    fetchCar();
+  }, [id]);
+
   const rating = [1, 2, 3, 4, 5];
+
+  if (isLoading) return <div className="p-6 bg-white rounded-lg lg:w-[35vw] w-full">Loading summary...</div>;
+  if (!car) return <div className="p-6 bg-white rounded-lg lg:w-[35vw] w-full">Car not found.</div>;
+
   return (
     <div className="flex h-fit gap-8 flex-col bg-white rounded-lg p-6 lg:w-[35vw] w-full">
       <div className="flex gap-1 flex-col">

@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Label } from "./ui/label";
 import { Slider } from "./ui/slider";
 import { Checkbox } from "./ui/checkbox";
-import { Cars } from "@/lib/Cars-data";
+import { CarService, Car } from "@/lib/car.service";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
@@ -11,6 +11,15 @@ export const Sidebar = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const [cars, setCars] = useState<Car[]>([]);
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      const data = await CarService.getAllCars();
+      setCars(data);
+    };
+    fetchCars();
+  }, []);
 
   // Initialize state from URL
   const selectedTypes = searchParams.get("type")?.split(",") || [];
@@ -84,7 +93,7 @@ export const Sidebar = () => {
                   {type.label}
                 </span>
                 <span className="text-xl text-gray-400 font-semibold ml-1">
-                  ({Cars.filter((car) => car.type === type.value).length})
+                  ({cars.filter((car: Car) => car.type === type.value).length})
                 </span>
               </Label>
             </div>
@@ -107,7 +116,7 @@ export const Sidebar = () => {
                   {cap.label}
                 </span>
                 <span className="text-xl text-gray-400 font-semibold ml-1">
-                  ({Cars.filter((car) => {
+                  ({cars.filter((car: Car) => {
                     if (cap.value === "8") return parseInt(car.seats) >= 8;
                     return car.seats === cap.value;
                   }).length})
@@ -121,7 +130,7 @@ export const Sidebar = () => {
           <p className="text-base text-gray-500 font-semibold">Price</p>
           <Slider
             className="h-full"
-            max={100}
+            max={500}
             step={1}
             value={maxPrice}
             onValueChange={updatePriceFilter}

@@ -1,26 +1,25 @@
 "use client";
-
 import ImageGallery from "react-image-gallery";
 
 import "react-image-gallery/styles/css/image-gallery.css";
-
 import React, { useState } from "react";
 import { FC } from "react";
-import { Cars } from "@/lib/Cars-data";
+import { Car } from "@/lib/car.service";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 
 interface CarInfoProps {
   id: string;
+  car?: Car | null;
 }
 
-export const CarInfo: FC<CarInfoProps> = ({ id }) => {
-  const car = Cars.find((car) => car.id === id);
-  const images = car?.gallery.map((image) => ({
+export const CarInfo: FC<CarInfoProps> = ({ id, car }) => {
+  const images = car?.gallery?.map((image) => ({
     original: image,
     thumbnail: image,
-  }));
+    thumbnailClass: "bg-green-300 h-[600px]",
+  })) || [];
 
   const router = useRouter();
   const Stars = [1, 2, 3, 4, 5];
@@ -39,7 +38,7 @@ export const CarInfo: FC<CarInfoProps> = ({ id }) => {
         
         
         <ImageGallery
-          fullScreen={false}
+          items={images || []}
           showNav={false}
           showBullets={false}
           showIndex={false}
@@ -47,10 +46,6 @@ export const CarInfo: FC<CarInfoProps> = ({ id }) => {
           showFullscreenButton={false}
           showPlayButton={false}
           thumbnailPosition="bottom"
-
-          thumbnailClass="bg-green-300 h-[600px]"
-          items={images}
-          
         />
         
       </div>

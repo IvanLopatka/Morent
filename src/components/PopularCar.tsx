@@ -30,17 +30,17 @@ export const PopularCar: FC = () => {
           View all
         </p>
       </div>
-      <div className="hidden lg:flex justify-between">
-        {cars.slice(0, 4).map((Car) => (
-          <div key={Car.id}>
+      <div className="hidden gap-4 lg:flex justify-between">
+        {cars.slice(0, 4).map((car) => (
+          <div key={car.id}>
             <CarCard
-              id={Car.id}
-              name={Car.name}
-              type={Car.type}
-              image={Car.thumbnail}
-              price={Car.price}
-              seats={Car.seats}
-              spending={Car.spending}
+              id={car.id}
+              name={car.name}
+              type={car.type}
+              image={car.thumbnail}
+              price={car.price}
+              seats={car.seats}
+              spending={car.spending}
             />
           </div>
         ))}
