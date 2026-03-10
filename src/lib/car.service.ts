@@ -44,10 +44,9 @@ export const CarService = {
 
     return data.map((car: any) => ({
       ...car,
-      // Resolve thumbnail URL (check both thumbnail and image columns)
+
       thumbnail: this.getPhotoUrl(car.thumbnail || car.image, 'thumbnails'),
-      // Resolve all gallery URLs (matching 'galleries' folder in Supabase)
-      // Resolve all gallery URLs
+
       gallery: (car.gallery || []).map((path: string) => this.getPhotoUrl(path, 'galleries')),
       spending: car.fuel_capacity || car.spending,
       price: car.price.toString()
@@ -70,5 +69,57 @@ export const CarService = {
       spending: data.fuel_capacity || data.spending,
       price: data.price.toString()
     };
+  },
+
+  async isCarSaved(carId: string, userId: string): Promise<boolean> {
+    const { data, error } = await supabase
+      .from('saved_cars')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('car_id', carId)
+      .single();
+
+    return !!data && !error;
+  },
+
+  async toggleSaveCar(carId: string, userId: string): Promise<{ saved: boolean }> {
+    const isSaved = await this.isCarSaved(carId, userId);
+
+    if (isSaved) {
+      await supabase
+        .from('saved_cars')
+        .delete()
+        .eq('user_id', userId)
+        .eq('car_id', carId);]
+      return { saved: false };
+    } else {
+      await supabase
+        .from('saved_cars')
+        .insert({ user_id: userId, car_id: carId });
+      return { saved: true };
+    }
+  },
+
+  async getSavedCars(userId: string, customClient?: any): Promise<Car[]> {
+    const client = customClient || supabase;
+    const { data, error } = await client
+      .from('saved_cars')
+      .select('car_id, cars(*)')
+      .eq('user_id', userId);
+
+    if (error || !data) return [];
+
+    return data
+      .filter((item: any) => item.cars !== null) // Filter out any broken links
+      .map((item: any) => {
+        const car = item.cars;
+        return {
+          ...car,
+          thumbnail: this.getPhotoUrl(car.thumbnail || car.image, 'thumbnails'),
+          gallery: (car.gallery || []).map((path: string) => this.getPhotoUrl(path, 'galleries')),
+          spending: car.fuel_capacity || car.spending,
+          price: car.price ? car.price.toString() : "0"
+        };
+      });
   }
 };
