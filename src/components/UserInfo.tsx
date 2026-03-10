@@ -34,7 +34,7 @@ export const UserInfo = async ({ id }: UserInfoProps) => {
 
   if (error) {
     console.error("Error fetching profile:", error);
-    return <div className="p-8 text-center">Error loading profile data.</div>;
+    // Continue anyway to allow viewing other details/metadata
   }
 
   return (
@@ -42,6 +42,7 @@ export const UserInfo = async ({ id }: UserInfoProps) => {
       profile={{ 
         ...user.user_metadata, 
         ...profile, 
+        avatar_url: profile?.avatar_url, // Force it to come from the table, not session
         id: user.id, 
         email: user.email 
       }} 

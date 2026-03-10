@@ -5,6 +5,9 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { CarService } from "@/lib/car.service";
+import { supabase } from "@/lib/supabase-client";
 
 interface CarCardProps {
   className?: string;
@@ -29,8 +32,29 @@ export const CarCard: FC<CarCardProps> = ({
 }) => {
   const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
-  const handleLike = () => {
-    setIsLiked(!isLiked);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserAndStatus = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUserId(session.user.id);
+        const status = await CarService.isCarSaved(id, session.user.id);
+        setIsLiked(status);
+      }
+    };
+    fetchUserAndStatus();
+  }, [id]);
+
+  const handleLike = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!userId) {
+      alert("Please login to save cars!");
+      return;
+    }
+
+    const { saved } = await CarService.toggleSaveCar(id, userId);
+    setIsLiked(saved);
   };
   return (
     <div
@@ -58,13 +82,15 @@ export const CarCard: FC<CarCardProps> = ({
           />
         </Button>
       </div>
-      <Image
-        className="w-full p-5"
-        src={image}
-        alt={name}
-        width={100}
-        height={100}
-      />
+      <div className="flex-1 flex items-center justify-center min-h-0 w-full">
+        <Image
+          className="w-full h-full object-contain p-5"
+          src={image}
+          alt={name}
+          width={280}
+          height={120}
+        />
+      </div>
       <div className="flex flex-row justify-between items-center">
         <div className="flex gap-x-1">
           <Image src="/gas-station.svg" alt="fuel" width={24} height={24} />

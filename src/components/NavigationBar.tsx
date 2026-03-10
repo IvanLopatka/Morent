@@ -15,8 +15,10 @@ export const NavigationBar: FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authView, setAuthView] = useState<"login" | "register">("login");
   const [session, setSession] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
@@ -82,50 +84,60 @@ export const NavigationBar: FC = () => {
         >
           <Image src="/setting.svg" alt="heart" width={24} height={24} />
         </Button>
-        {session ? (
+        {mounted ? (
+          session ? (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="w-11 h-11 scale-[0.7] lg:scale-none border-2 rounded-full"
+              onClick={() => setIsAuthModalOpen(true)}
+            >
+              <Image src="/profile.svg" alt="profile" width={24} height={24} />
+            </Button>
+          ) : (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-11 h-11 scale-[0.7] lg:scale-none border-2 rounded-full"
+                >
+                  <Image src="/profile.svg" alt="profile" width={24} height={24} />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[400px]">
+                <div className="w-full flex flex-col h-full p-4">
+                  <h3 className="text-xl font-semibold">Login or Register in your account</h3>
+                  <div className="flex flex-row gap-2 mt-2">
+                    <Button 
+                      className="w-1/2" 
+                      size="lg" 
+                      variant="outline"
+                      onClick={() => openAuth("login")}
+                    >
+                      Login
+                    </Button>
+                    <Button 
+                      className="w-1/2" 
+                      size="lg" 
+                      variant="default"
+                      onClick={() => openAuth("register")}
+                    >
+                      Register
+                    </Button>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          )
+        ) : (
           <Button
             variant="ghost"
             size="icon"
             className="w-11 h-11 scale-[0.7] lg:scale-none border-2 rounded-full"
-            onClick={() => setIsAuthModalOpen(true)}
           >
             <Image src="/profile.svg" alt="profile" width={24} height={24} />
           </Button>
-        ) : (
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="w-11 h-11 scale-[0.7] lg:scale-none border-2 rounded-full"
-              >
-                <Image src="/profile.svg" alt="profile" width={24} height={24} />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[400px]">
-              <div className="w-full flex flex-col h-full p-4">
-                <h3 className="text-xl font-semibold">Login or Register in your account</h3>
-                <div className="flex flex-row gap-2 mt-2">
-                  <Button 
-                    className="w-1/2" 
-                    size="lg" 
-                    variant="outline"
-                    onClick={() => openAuth("login")}
-                  >
-                    Login
-                  </Button>
-                  <Button 
-                    className="w-1/2" 
-                    size="lg" 
-                    variant="default"
-                    onClick={() => openAuth("register")}
-                  >
-                    Register
-                  </Button>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
         )}
       </div>
       <AuthModal 
