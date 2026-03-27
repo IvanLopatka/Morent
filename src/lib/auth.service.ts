@@ -54,15 +54,21 @@ export const AuthService = {
     // Once you run the SQL to add 'phone' and 'avatar_url', you can include them here.
     const dbUpdates: any = {};
     if (updates.full_name) dbUpdates.full_name = updates.full_name;
-    // Uncomment these once you run the SQL:
-    // if (updates.phone) dbUpdates.phone = updates.phone;
-    // if (updates.avatar_url) dbUpdates.avatar_url = updates.avatar_url;
+    if (updates.phone) dbUpdates.phone = updates.phone;
+    if (updates.avatar_url) dbUpdates.avatar_url = updates.avatar_url;
 
     if (Object.keys(dbUpdates).length > 0) {
-      await supabase
+      const { error: dbError } = await supabase
         .from("profiles")
-        .update(dbUpdates)
-        .eq("id", authData.user?.id);
+        .upsert({
+          id: authData.user?.id,
+          ...dbUpdates,
+          updated_at: new Date().toISOString(),
+        });
+
+      if (dbError) {
+        console.error("Error upserting to profiles table:", dbError);
+      }
     }
 
     return { data: authData, error: null };
@@ -74,7 +80,7 @@ export const AuthService = {
 
   async uploadAvatar(file: File, userId: string) {
     const fileExt = file.name.split('.').pop();
-    const fileName = `${userId}-${Math.random()}.${fileExt}`;
+    const fileName = `${userId}-${Date.now()}.${fileExt}`;
     const filePath = fileName;
 
     // 1. Upload file to Supabase Storage
@@ -91,9 +97,6 @@ export const AuthService = {
       .from('avatars')
       .getPublicUrl(filePath);
 
-    const publicUrl = data.publicUrl;
-
-    // 3. Update User Profile with new avatar_url
-    return await this.updateProfile({ avatar_url: publicUrl });
+    return { data: data.publicUrl, error: null };
   },
 };

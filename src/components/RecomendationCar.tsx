@@ -74,6 +74,7 @@ export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "def
                   price={car.price}
                   seats={car.seats}
                   spending={car.spending}
+                  
                 />
               </div>
             ))}

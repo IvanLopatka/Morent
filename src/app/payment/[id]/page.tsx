@@ -22,7 +22,7 @@ export default async function Home({ params }: { params: { id: string } }) {
           <PayMethod />
           <ConfirmationForm />
         </div>
-        <RentalSummary id={id} name={""} thumbnail={""} price={""} />
+        <RentalSummary id={id} />
       </div>
       <AboutUs />
     </div>

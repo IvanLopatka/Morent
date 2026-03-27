@@ -30,6 +30,7 @@ export const UserInfoUI = ({ profile }: UserInfoUIProps) => {
     full_name: profile?.full_name || "",
     email: profile?.email || "",
     phone: profile?.phone || "",
+    avatar_url: profile?.avatar_url || "",
   });
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -40,16 +41,16 @@ export const UserInfoUI = ({ profile }: UserInfoUIProps) => {
 
     setIsUploading(true);
     try {
-      const { error } = await AuthService.uploadAvatar(file, profile.id);
+      const { data: publicUrl, error } = await AuthService.uploadAvatar(file, profile.id);
       if (error) {
         console.error("Upload error details:", error);
         alert(`Upload failed: ${error.message || "Unknown storage error"}`);
         return;
       }
       
-      console.log("Avatar updated successfully");
+      console.log("Avatar uploaded to storage:", publicUrl);
+      setFormData(prev => ({ ...prev, avatar_url: publicUrl }));
       setIsUploadDialogOpen(false);
-      window.location.reload(); 
     } catch (error: any) {
       console.error("Error uploading avatar:", error);
       alert(`Failed to upload image: ${error.message || "Check your Supabase console"}`);
@@ -70,7 +71,8 @@ export const UserInfoUI = ({ profile }: UserInfoUIProps) => {
     const hasChanges =
       formData.full_name !== (profile?.full_name || "") ||
       formData.email !== (profile?.email || "") ||
-      formData.phone !== (profile?.phone || "");
+      formData.phone !== (profile?.phone || "") ||
+      formData.avatar_url !== (profile?.avatar_url || "");
 
     if (!hasChanges) {
       console.log("No changes detected, skipping save.");
@@ -83,6 +85,7 @@ export const UserInfoUI = ({ profile }: UserInfoUIProps) => {
       const { error } = await AuthService.updateProfile({
         full_name: formData.full_name,
         phone: formData.phone,
+        avatar_url: formData.avatar_url,
       });
 
       if (error) {
@@ -112,6 +115,7 @@ export const UserInfoUI = ({ profile }: UserInfoUIProps) => {
       full_name: profile?.full_name || "",
       email: profile?.email || "",
       phone: profile?.phone || "",
+      avatar_url: profile?.avatar_url || "",
     });
     setIsEditing(false);
   };
@@ -177,7 +181,7 @@ export const UserInfoUI = ({ profile }: UserInfoUIProps) => {
             <div className="relative">
               <div className="w-[120px] h-[120px] rounded-full ring-4 ring-white shadow-md overflow-hidden relative bg-slate-50">
                 <Image
-                  src={profile?.avatar_url || "/profile.svg"}
+                  src={formData.avatar_url || "/profile.svg"}
                   alt="profile"
                   fill
                   unoptimized

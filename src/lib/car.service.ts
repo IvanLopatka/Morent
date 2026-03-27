@@ -90,7 +90,7 @@ export const CarService = {
         .from('saved_cars')
         .delete()
         .eq('user_id', userId)
-        .eq('car_id', carId);]
+        .eq('car_id', carId);
       return { saved: false };
     } else {
       await supabase
