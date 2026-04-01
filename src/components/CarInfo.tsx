@@ -20,7 +20,7 @@ interface CarInfoProps {
 }
 
 export const CarInfo: FC<CarInfoProps> = ({ id, car }) => {
-  const images = car?.gallery || [];
+  const images = car ? [car.thumbnail, ...(car.gallery || [])] : [];
   const [activeIndex, setActiveIndex] = useState(0);
 
 
@@ -41,7 +41,7 @@ export const CarInfo: FC<CarInfoProps> = ({ id, car }) => {
         <div className="flex flex-col gap-4 w-full">
           <Dialog>
             <DialogTrigger asChild>
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl cursor-zoom-in bg-blue-500">
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl cursor-zoom-in bg-none">
                 {images.length > 0 && (
                   <Image
                     src={images[activeIndex]}

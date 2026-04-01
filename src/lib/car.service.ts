@@ -5,7 +5,7 @@ export interface Car {
   name: string;
   type: string;
   thumbnail: string;
-  gallery: string[];
+  gallery?: string[] | null;
   price: string;
   seats: string;
   spending: string;
