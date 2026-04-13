@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/client";
 import { AuthError, Session, User } from "@supabase/supabase-js";
+import { getPublicUrlByTable } from "supa-transfer";
 
 const supabase = createClient();
 
@@ -93,10 +94,10 @@ export const AuthService = {
     }
 
     // 2. Get Public URL
-    const { data } = supabase.storage
-      .from('avatars')
-      .getPublicUrl(filePath);
+    const publicUrl = getPublicUrlByTable(supabase, 'profiles', 'avatar_url', filePath, {
+      bucket: 'avatars'
+    });
 
-    return { data: data.publicUrl, error: null };
+    return { data: publicUrl, error: null };
   },
 };

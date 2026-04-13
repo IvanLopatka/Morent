@@ -1,4 +1,5 @@
 import { createClient } from "@/utils/supabase/client";
+import { getPublicUrlByTable } from "supa-transfer";
 
 export interface Car {
   id: string;
@@ -28,8 +29,9 @@ export const CarService = {
       finalPath = `${folder}/${path}`;
     }
 
-    const { data } = supabase.storage.from(BUCKET_NAME).getPublicUrl(finalPath);
-    return data.publicUrl;
+    return getPublicUrlByTable(supabase, 'cars', 'thumbnail', finalPath, { 
+      bucket: BUCKET_NAME 
+    });
   },
 
   async getAllCars(): Promise<Car[]> {
