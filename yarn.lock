@@ -4907,6 +4907,10 @@ styled-jsx@5.1.6:
   dependencies:
     client-only "0.0.1"
 
+"supa-transfer@file:../supa-transfer":
+  version "1.0.0"
+  resolved "file:../supa-transfer"
+
 supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/supports-color/-/supports-color-2.0.0.tgz"
