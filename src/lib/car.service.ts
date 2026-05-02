@@ -1,4 +1,5 @@
 import { createClient } from "@/utils/supabase/client";
+
 import { getPublicUrlByTable } from "supa-transfer";
 
 export interface Car {
@@ -17,20 +18,20 @@ const supabase = createClient();
 const BUCKET_NAME = 'car-photos';
 
 export const CarService = {
-  // Helper to get the full URL for a photo in storage
+
   getPhotoUrl(path: string, folder: string = '') {
     if (!path) return "/koenig.png";
     if (path.startsWith('http')) return path;
-    if (path.startsWith('/')) return path; // Keep local paths as is
+    if (path.startsWith('/')) return path;
 
-    // Ensure path has the folder prefix if provided
+
     let finalPath = path;
     if (folder && !path.startsWith(`${folder}/`)) {
       finalPath = `${folder}/${path}`;
     }
 
-    return getPublicUrlByTable(supabase, 'cars', 'thumbnail', finalPath, { 
-      bucket: BUCKET_NAME 
+    return getPublicUrlByTable(supabase, 'cars', 'thumbnail', finalPath, {
+      bucket: BUCKET_NAME
     });
   },
 
