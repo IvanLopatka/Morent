@@ -7,7 +7,9 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { CarService } from "@/lib/car.service";
-import { supabase } from "@/lib/supabase-client";
+import { createClient } from "@/utils/supabase/client";
+
+const supabase = createClient();
 
 interface CarCardProps {
   className?: string;

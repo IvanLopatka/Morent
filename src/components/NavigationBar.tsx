@@ -2,21 +2,24 @@
 import Image from "next/image";
 import { FC } from "react";
 import React from "react";
-import { Input } from "./ui/input";
+
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 import { useState, useEffect } from "react";
 import { AuthModal } from "../app/auth/AuthModal";
-import { supabase } from "@/lib/supabase-client";
+import { createClient } from "@/utils/supabase/client";
 import { CarService, Car } from "@/lib/car.service";
 import { Trash2, Heart } from "lucide-react";
+import { useAuthStore } from "@/store/auth.store";
+
+const supabase = createClient();
 
 export const NavigationBar: FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authView, setAuthView] = useState<"login" | "register">("login");
-  const [session, setSession] = useState<any>(null);
+  const { session, setSession } = useAuthStore();
   const [mounted, setMounted] = useState(false);
   const [savedCars, setSavedCars] = useState<Car[]>([]);
   const [isSavedCarsOpen, setIsSavedCarsOpen] = useState(false);
@@ -36,6 +39,8 @@ export const NavigationBar: FC = () => {
 
   useEffect(() => {
     setMounted(true);
+    
+    // Initial fetch to populate the store
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
@@ -45,7 +50,7 @@ export const NavigationBar: FC = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [setSession]);
 
   const openAuth = (view: "login" | "register") => {
     setAuthView(view);
