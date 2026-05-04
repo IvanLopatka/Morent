@@ -59,25 +59,7 @@ export const NavigationBar: FC = () => {
             MORENT
           </h3>
         </Link>
-        <div className="relative items-center hidden lg:flex">
-          <Input
-            className="pl-12  rounded-2xl text-2xl"
-            placeholder="Search something here"
-            id="text"
-            size={50}
-            type="search"
-          />
-          <Image
-            className="absolute top-2 left-3"
-            src="/search.svg"
-            alt="search"
-            height={24}
-            width={24}
-          />
-          <Button className="absolute right-0" type="button" variant="ghost">
-            <Image src="/filter.svg" alt="filter" width={24} height={24} />
-          </Button>
-        </div>
+        
       </div>
       <div className="flex gap-0 lg:gap-5">
         {mounted ? (
