@@ -38,6 +38,15 @@ export const AuthService = {
     });
   },
 
+  async signInWithGoogle() {
+    return await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/`,
+      },
+    });
+  },
+
   async signOut() {
     return await supabase.auth.signOut();
   },
