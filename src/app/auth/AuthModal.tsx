@@ -84,13 +84,15 @@ export const AuthModal = ({
       if (signInError) {
         console.error("Sign in error:", signInError.message);
         setError(signInError.message);
+        
         return;
       }
     }
 
     // Success: Refresh the page to update Server Components and close the modal
-    router.refresh();
+    window.location.reload(); 
     onClose();
+    
   };
 
   const handleSignOut = async () => {
