@@ -95,8 +95,7 @@ export const AuthModal = ({
 
   const handleSignOut = async () => {
     await AuthService.signOut();
-    router.refresh();
-    onClose();
+    window.location.reload();
   };
 
   if (loading && isOpen) return null;
