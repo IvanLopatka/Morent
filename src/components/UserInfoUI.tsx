@@ -86,6 +86,7 @@ export const UserInfoUI = ({ profile }: UserInfoUIProps) => {
         full_name: formData.full_name,
         phone: formData.phone,
         avatar_url: formData.avatar_url,
+        email: formData.email,
       });
 
       if (error) {
@@ -95,14 +96,14 @@ export const UserInfoUI = ({ profile }: UserInfoUIProps) => {
       console.log("Profile updated successfully");
       setIsEditing(false);
       // Force a refresh to show updated data from the server components
-      window.location.reload();
+     
     } catch (error: any) {
       console.error("Error updating profile detailed:", {
-        message: error.message,
-        details: error.details,
-        hint: error.hint,
-        code: error.code,
-        error
+        message: error?.message || "Unknown error",
+        details: error?.details || "No details",
+        hint: error?.hint || "No hint",
+        code: error?.code || "No code",
+        fullError: error
       });
       alert(`Failed to update profile: ${error.message || "Unknown error"}`);
     } finally {
@@ -253,9 +254,9 @@ export const UserInfoUI = ({ profile }: UserInfoUIProps) => {
                   id="email"
                   name="email"
                   type="email"
-                  disabled
                   value={formData.email}
-                  className="rounded-xl border-slate-200 bg-slate-100 cursor-not-allowed h-12"
+                  onChange={handleInputChange}
+                  className="rounded-xl border-slate-200 focus:ring-primary/20 h-12 bg-slate-50/50"
                   placeholder="Your email address"
                 />
               ) : (
