@@ -50,13 +50,13 @@ export const UserInfo = async ({ id }: UserInfoProps) => {
     email: isOwnProfile ? user.email : (profile?.email || (profile as any)?.email || ""),
   };
 
-  // 4. Ensure avatar_url is explicitly prioritized from DB, with fallback to metadata/session
-  // If it's in the table, we definitely want that.
-  mergedProfile.avatar_url = profile?.avatar_url || (isOwnProfile ? user.user_metadata?.avatar_url : "") || "";
+  // 4. Ensure avatar_url is explicitly prioritized from DB (where it's named 'avatar'), 
+  // with fallback to metadata/session
+  mergedProfile.avatar_url = profile?.avatar || (isOwnProfile ? user.user_metadata?.avatar_url : "") || "";
 
   console.log(`[UserInfo] Profile merge for ${id}:`, { 
     fromDB: !!profile, 
-    hasAvatarInDB: !!profile?.avatar_url,
+    hasAvatarInDB: !!profile?.avatar,
     isOwn: isOwnProfile 
   });
 
