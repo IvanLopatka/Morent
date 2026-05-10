@@ -35,6 +35,7 @@ export const AuthModal = ({
     name: "",
     email: "",
     password: "",
+    phone: "",
   });
 
   useEffect(() => {
@@ -67,7 +68,8 @@ export const AuthModal = ({
       const { error: signUpError } = await AuthService.signUp(
         formData.email,
         formData.password,
-        formData.name
+        formData.name,
+        formData.phone
       );
       
       if (signUpError) {
@@ -90,7 +92,7 @@ export const AuthModal = ({
     }
 
     // Success: Refresh the page to update Server Components and close the modal
-    window.location.reload(); 
+    
     onClose();
     
   };
@@ -191,17 +193,30 @@ export const AuthModal = ({
 
                 <form onSubmit={handleSubmit} className="space-y-4 py-4">
                 {view === "register" && (
-                    <div className="space-y-2">
-                    <Label htmlFor="name">Full Name</Label>
-                    <Input
-                        id="name"
-                        placeholder="John Doe"
-                        required
-                        className="col-span-3"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    />
-                    </div>
+                    <>
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Full Name</Label>
+                        <Input
+                            id="name"
+                            placeholder="John Doe"
+                            required
+                            className="col-span-3"
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="phone">Phone Number</Label>
+                        <Input
+                            id="phone"
+                            placeholder="+1 234 567 890"
+                            required
+                            className="col-span-3"
+                            value={formData.phone}
+                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        />
+                      </div>
+                    </>
                 )}
                 <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>

@@ -17,7 +17,7 @@ export const AuthService = {
     return await supabase.auth.getSession();
   },
 
-  async signUp(email: string, password: string, fullName: string) {
+  async signUp(email: string, password: string, fullName: string, phone: string) {
     return await supabase.auth.signUp({
       email,
       password,
@@ -25,6 +25,7 @@ export const AuthService = {
         data: {
           full_name: fullName,
           email,
+          phone,
           avatar_url: "",
         },
       },
@@ -51,9 +52,10 @@ export const AuthService = {
     return await supabase.auth.signOut();
   },
 
-  async updateProfile(updates: { full_name?: string; phone?: string; avatar_url?: string }) {
+  async updateProfile(updates: { full_name?: string; phone?: string; avatar_url?: string; email?: string }) {
     // 1. Update Supabase Auth User Metadata (This always works/exists)
     const { data: authData, error: authError } = await supabase.auth.updateUser({
+      email: updates.email,
       data: updates,
     });
 
@@ -65,19 +67,32 @@ export const AuthService = {
     const dbUpdates: any = {};
     if (updates.full_name) dbUpdates.full_name = updates.full_name;
     if (updates.phone) dbUpdates.phone = updates.phone;
-    if (updates.avatar_url) dbUpdates.avatar_url = updates.avatar_url;
+    if (updates.avatar_url) dbUpdates.avatar = updates.avatar_url;
+    if (updates.email) dbUpdates.email = updates.email;
+    else if (authData.user?.email) dbUpdates.email = authData.user.email;
 
     if (Object.keys(dbUpdates).length > 0) {
+      if (!authData.user?.id) {
+        console.error("No user ID found for profile upsert");
+        return { data: authData, error: { message: "User ID missing" } as any };
+      }
+
       const { error: dbError } = await supabase
         .from("profiles")
         .upsert({
-          id: authData.user?.id,
+          id: authData.user.id,
           ...dbUpdates,
-          updated_at: new Date().toISOString(),
         });
 
       if (dbError) {
-        console.error("Error upserting to profiles table:", dbError);
+        console.error("Error upserting to profiles table:", {
+          message: dbError.message,
+          details: dbError.details,
+          hint: dbError.hint,
+          code: dbError.code,
+          error: dbError
+        });
+        return { data: authData, error: dbError as any };
       }
     }
 
@@ -103,7 +118,7 @@ export const AuthService = {
     }
 
     // 2. Get Public URL
-    const publicUrl = getPublicUrlByTable(supabase, 'profiles', 'avatar_url', filePath, {
+    const publicUrl = getPublicUrlByTable(supabase, 'profiles', 'avatar', filePath, {
       bucket: 'avatars'
     });
 
