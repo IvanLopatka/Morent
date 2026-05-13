@@ -4,11 +4,11 @@ export const getCities = async (): Promise<string[]> => {
   });
   const data = await response.json();
   console.log(data);
-   const city_names: string[] = data.geonames.map((city: { name: string }) => city.name);
+  const city_names: string[] = data.geonames.map((city: { name: string }) => city.name);
   return city_names;
 };
-    
-  
+
+
 
 
 
