@@ -2,6 +2,8 @@ import { createClient } from "@/utils/supabase/client";
 
 import { getPublicUrlByTable } from "supa-transfer";
 
+
+
 export interface Car {
   id: string;
   name: string;
@@ -12,6 +14,8 @@ export interface Car {
   seats: string;
   spending: string;
   description: string;
+  availableFrom?: string; // ISO date string
+  availableTo?: string;   // ISO date string
 }
 
 const supabase = createClient();
@@ -47,12 +51,12 @@ export const CarService = {
 
     return data.map((car: any) => ({
       ...car,
-
       thumbnail: this.getPhotoUrl(car.thumbnail || car.image, 'thumbnails'),
-
       gallery: (car.gallery || []).map((path: string) => this.getPhotoUrl(path, 'galleries')),
       spending: car.fuel_capacity || car.spending,
-      price: car.price.toString()
+      price: car.price.toString(),
+      availableFrom: car.available_from || car.availableFrom,
+      availableTo: car.available_to || car.availableTo,
     }));
   },
 
@@ -70,7 +74,9 @@ export const CarService = {
       thumbnail: this.getPhotoUrl(data.thumbnail || data.image, 'thumbnails'),
       gallery: (data.gallery || []).map((path: string) => this.getPhotoUrl(path, 'galleries')),
       spending: data.fuel_capacity || data.spending,
-      price: data.price.toString()
+      price: data.price.toString(),
+      availableFrom: data.available_from || data.availableFrom,
+      availableTo: data.available_to || data.availableTo,
     };
   },
 
@@ -121,7 +127,9 @@ export const CarService = {
           thumbnail: this.getPhotoUrl(car.thumbnail || car.image, 'thumbnails'),
           gallery: (car.gallery || []).map((path: string) => this.getPhotoUrl(path, 'galleries')),
           spending: car.fuel_capacity || car.spending,
-          price: car.price ? car.price.toString() : "0"
+          price: car.price ? car.price.toString() : "0",
+          availableFrom: car.available_from || car.availableFrom,
+          availableTo: car.available_to || car.availableTo,
         };
       });
   }

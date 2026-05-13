@@ -4,8 +4,11 @@ import React, { useEffect, useState } from "react";
 import { FC } from "react";
 import { CarCard } from "./CarCard";
 import { CarService, Car } from "@/lib/car.service";
+import { useSearchParams } from "next/navigation";
+import { filterCars } from "@/lib/filter-utils";
 
 export const PopularCar: FC = () => {
+  const searchParams = useSearchParams();
   const [cars, setCars] = useState<Car[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -17,6 +20,16 @@ export const PopularCar: FC = () => {
     };
     fetchCars();
   }, []);
+
+  const filters = {
+    types: searchParams.get("type")?.split(",") || [],
+    capacities: searchParams.get("capacity")?.split(",") || [],
+    maxPrice: parseInt(searchParams.get("price") || "500"),
+    pickUpDate: searchParams.get("pickUpDate") || undefined,
+    dropOffDate: searchParams.get("dropOffDate") || undefined,
+  };
+
+  const filteredCars = filterCars(cars, filters);
 
   if (isLoading) return null;
 
@@ -31,7 +44,7 @@ export const PopularCar: FC = () => {
         </p>
       </div>
       <div className="hidden gap-4 lg:flex justify-between">
-        {cars.slice(0, 4).map((car) => (
+        {filteredCars.slice(0, 4).map((car) => (
           <div key={car.id}>
             <CarCard
               id={car.id}

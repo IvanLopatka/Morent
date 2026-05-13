@@ -9,6 +9,8 @@ export const Cars = [
     seats: "2",
     spending: "100",
     description: "The Koenigsegg Agera is a high-performance sports car produced by the Swedish manufacturer Koenigsegg. It is known for its extreme speed and performance.",
+    availableFrom: "2026-05-10",
+    availableTo: "2026-09-20",
   },
   {
     id: "2",
@@ -20,6 +22,8 @@ export const Cars = [
     seats: "2",
     spending: "80",
     description: "The All new Rush is a high-performance sports car produced by the Swedish manufacturer All new Rush. It is known for its extreme speed and performance.",
+    availableFrom: "2026-05-12",
+    availableTo: "2026-09-18",
   },
   {
     id: "3",
@@ -31,6 +35,8 @@ export const Cars = [
     seats: "2",
     spending: "80",
     description: "The Nissan GTR-34 is a high-performance sports car produced by the Japanese manufacturer Nissan. It is known for its extreme speed and performance.",
+    availableFrom: "2026-05-15",
+    availableTo: "2026-09-25",
   },
   {
     id: "4",
@@ -42,6 +48,8 @@ export const Cars = [
     seats: "2",
     spending: "90",
     description: "The Rolls-Royce is a high-performance sports car produced by the British manufacturer Rolls-Royce. It is known for its extreme speed and performance.",
+    availableFrom: "2026-10-10",
+    availableTo: "2027-01-30",
   },
   {
     id: "5",
@@ -53,6 +61,8 @@ export const Cars = [
     seats: "2",
     spending: "80",
     description: "The CR-V is a high-performance sports car produced by the Japanese manufacturer Honda. It is known for its extreme speed and performance.",
+    availableFrom: "2026-11-20",
+    availableTo: "2027-05-28",
   }, {
     id: "6",
     name: "All new Rush",
@@ -63,6 +73,8 @@ export const Cars = [
     seats: "2",
     spending: "80",
     description: "The All new Rush is a high-performance sports car produced by the Swedish manufacturer All new Rush. It is known for its extreme speed and performance.",
+    availableFrom: "2026-08-10",
+    availableTo: "2027-09-15",
   },
   {
     id: "7",
@@ -74,6 +86,8 @@ export const Cars = [
     seats: "2",
     spending: "80",
     description: "The Nissan GTR-34 is a high-performance sports car produced by the Japanese manufacturer Nissan. It is known for its extreme speed and performance.",
+    availableFrom: "2026-10-25",
+    availableTo: "2027-01-15",
   },
   {
     id: "8",
@@ -85,6 +99,8 @@ export const Cars = [
     seats: "2",
     spending: "90",
     description: "The Rolls-Royce is a high-performance sports car produced by the British manufacturer Rolls-Royce. It is known for its extreme speed and performance.",
+    availableFrom: "2026-12-25",
+    availableTo: "2027-03-22",
   }, {
     id: "9",
     name: "Koenigsegg",
@@ -95,6 +111,8 @@ export const Cars = [
     seats: "2",
     spending: "100",
     description: "The Koenigsegg Agera is a high-performance sports car produced by the Swedish manufacturer Koenigsegg. It is known for its extreme speed and performance.",
+    availableFrom: "2026-11-28",
+    availableTo: "2027-02-25",
   },
   {
     id: "10",
@@ -106,6 +124,8 @@ export const Cars = [
     seats: "2",
     spending: "80",
     description: "The All new Rush is a high-performance sports car produced by the Swedish manufacturer All new Rush. It is known for its extreme speed and performance.",
+    availableFrom: "2026-11-25",
+    availableTo: "2027-03-28",
   },
   {
     id: "11",
@@ -117,6 +137,8 @@ export const Cars = [
     seats: "2",
     spending: "80",
     description: "The Nissan GTR-34 is a high-performance sports car produced by the Japanese manufacturer Nissan. It is known for its extreme speed and performance.",
+    availableFrom: "2026-12-20",
+    availableTo: "2027-04-22",
   }, {
     id: "12",
     name: "All new Rush",
@@ -127,5 +149,7 @@ export const Cars = [
     seats: "2",
     spending: "80",
     description: "The All new Rush is a high-performance sports car produced by the Swedish manufacturer All new Rush. It is known for its extreme speed and performance.",
+    availableFrom: "2026-11-25",
+    availableTo: "2027-03-28",
   },
 ]
