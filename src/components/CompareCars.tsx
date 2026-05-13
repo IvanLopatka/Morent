@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { FC } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { Calendar } from "./ui/calendar";
@@ -34,29 +34,47 @@ interface CarLocation {
   time: string;
 }
 
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+
 export const CompareCars: FC<CompareCarsProps> = ({
   gapVariant = "default",
   widthVariant = "default",
 }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const { data: cityNames = [] } = useQuery({
     queryKey: ["cities"],
     queryFn: getCities,
   });
 
-  const [pickUpLocation, setPickUpLocation] = useState<CarLocation>({
-    city: {
-      name: "",
-    },
-    date: undefined,
-    time: "",
+  // Helper to get initial state from URL
+  const getInitialLocation = (prefix: string): CarLocation => ({
+    city: { name: "" }, // Don't sync city with URL
+    date: searchParams.get(`${prefix}Date`) ? new Date(searchParams.get(`${prefix}Date`)!) : undefined,
+    time: "", // Don't sync time with URL
   });
-  const [dropOffLocation, setDropOffLocation] = useState<CarLocation>({
-    city: {
-      name: "",
-    },
-    date: undefined,
-    time: "",
-  });
+
+  const [pickUpLocation, setPickUpLocation] = useState<CarLocation>(getInitialLocation("pickUp"));
+  const [dropOffLocation, setDropOffLocation] = useState<CarLocation>(getInitialLocation("dropOff"));
+
+  const updateURLParams = (updates: Record<string, string | undefined>) => {
+    const params = new URLSearchParams(searchParams.toString());
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+    });
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   const hourOptions = Array.from(
     { length: 24 },
@@ -74,9 +92,15 @@ export const CompareCars: FC<CompareCarsProps> = ({
   } as const;
 
   const handleSwapLocations = () => {
-    const temp = pickUpLocation;
-    setPickUpLocation(dropOffLocation);
-    setDropOffLocation(temp);
+    const tempPickUp = pickUpLocation;
+    const tempDropOff = dropOffLocation;
+    setPickUpLocation(tempDropOff);
+    setDropOffLocation(tempPickUp);
+
+    updateURLParams({
+      pickUpDate: tempDropOff.date?.toISOString().split('T')[0],
+      dropOffDate: tempPickUp.date?.toISOString().split('T')[0],
+    });
   };
 
   return (
@@ -108,12 +132,14 @@ export const CompareCars: FC<CompareCarsProps> = ({
 
               <Select
                 value={pickUpLocation.city.name}
-                onValueChange={(value) =>
-                  setPickUpLocation((prev) => ({
-                    ...prev,
-                    city: { name: value },
-                  }))
-                }
+                  onValueChange={(value) => {
+                    setPickUpLocation((prev) => ({
+                      ...prev,
+                      city: { name: value },
+                    }));
+                    // Removed updateURLParams for pickUpCity
+                  }
+                  }
               >
                 <SelectTrigger className="border-none p-0 shadow-none">
                   <p className="text-xs font-medium hover:underline  text-gray-500">
@@ -142,7 +168,7 @@ export const CompareCars: FC<CompareCarsProps> = ({
               <p className="font-bold mb-[10px]">Date</p>
               <PopoverTrigger asChild>
                 <p className="text-xs font-medium hover:underline  text-gray-500">
-                  {pickUpLocation.date
+                  {isMounted && pickUpLocation.date
                     ? pickUpLocation.date.toLocaleDateString()
                     : "Select your date"}
                 </p>
@@ -151,9 +177,13 @@ export const CompareCars: FC<CompareCarsProps> = ({
               <PopoverContent>
                 <Calendar
                   mode="single"
+                  startMonth={new Date()}
+                  endMonth={new Date(new Date().getFullYear() + 4, 11)}
                   selected={pickUpLocation.date}
-                  onSelect={(date) =>
-                    setPickUpLocation((prev) => ({ ...prev, date }))
+                  onSelect={(date) => {
+                    setPickUpLocation((prev) => ({ ...prev, date }));
+                    updateURLParams({ pickUpDate: date?.toISOString().split('T')[0] });
+                  }
                   }
                   className="rounded-md border-none"
                   captionLayout="dropdown"
@@ -165,8 +195,10 @@ export const CompareCars: FC<CompareCarsProps> = ({
               <p className="flex-wrap font-bold">Time</p>
               <Select
                 value={pickUpLocation.time || undefined}
-                onValueChange={(value) =>
-                  setPickUpLocation((prev) => ({ ...prev, time: value }))
+                onValueChange={(value) => {
+                  setPickUpLocation((prev) => ({ ...prev, time: value }));
+                  // Removed updateURLParams for pickUpTime
+                }
                 }
               >
                 <SelectTrigger className="border-none p-0 shadow-none">
@@ -215,12 +247,14 @@ export const CompareCars: FC<CompareCarsProps> = ({
 
               <Select
                 value={dropOffLocation.city.name}
-                onValueChange={(value) =>
-                  setDropOffLocation((prev) => ({
-                    ...prev,
-                    city: { name: value },
-                  }))
-                }
+                  onValueChange={(value) => {
+                    setDropOffLocation((prev) => ({
+                      ...prev,
+                      city: { name: value },
+                    }));
+                    // Removed updateURLParams for dropOffCity
+                  }
+                  }
               >
                 <SelectTrigger className="border-none p-0 shadow-none">
                   <p className="text-xs font-medium hover:underline  text-gray-500">
@@ -249,7 +283,7 @@ export const CompareCars: FC<CompareCarsProps> = ({
               <p className="font-bold mb-[10px]">Date</p>
               <PopoverTrigger asChild>
                 <p className="text-xs font-medium hover:underline text-gray-500">
-                  {dropOffLocation.date
+                  {isMounted && dropOffLocation.date
                     ? dropOffLocation.date.toLocaleDateString()
                     : "Select your date"}
                 </p>
@@ -257,9 +291,13 @@ export const CompareCars: FC<CompareCarsProps> = ({
               <PopoverContent>
                 <Calendar
                   mode="single"
+                  startMonth={new Date()}
+                  endMonth={new Date(new Date().getFullYear() + 4, 11)}
                   selected={dropOffLocation.date}
-                  onSelect={(date) =>
-                    setDropOffLocation((prev) => ({ ...prev, date }))
+                  onSelect={(date) => {
+                    setDropOffLocation((prev) => ({ ...prev, date }));
+                    updateURLParams({ dropOffDate: date?.toISOString().split('T')[0] });
+                  }
                   }
                   className="rounded-md border-none"
                   captionLayout="dropdown"
@@ -271,8 +309,10 @@ export const CompareCars: FC<CompareCarsProps> = ({
               <p className="flex-wrap font-bold">Time</p>
               <Select
                 value={dropOffLocation.time || undefined}
-                onValueChange={(value) =>
-                  setDropOffLocation((prev) => ({ ...prev, time: value }))
+                onValueChange={(value) => {
+                  setDropOffLocation((prev) => ({ ...prev, time: value }));
+                  // Removed updateURLParams for dropOffTime
+                }
                 }
               >
                 <SelectTrigger className="border-none p-0 shadow-none">
