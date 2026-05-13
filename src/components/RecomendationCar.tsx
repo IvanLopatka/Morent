@@ -32,6 +32,8 @@ export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "def
     types: searchParams.get("type")?.split(",") || [],
     capacities: searchParams.get("capacity")?.split(",") || [],
     maxPrice: parseInt(searchParams.get("price") || "100"),
+    pickUpDate: searchParams.get("pickUpDate") || undefined,
+    dropOffDate: searchParams.get("dropOffDate") || undefined,
   };
 
   const filteredCars = filterCars(cars, filters);
