@@ -8,8 +8,11 @@ import { MobilePopularCar } from "@/components";
 import { RecomendationCar } from "@/components";
 import { AboutUs } from "@/components";
 import { Suspense } from "react";
+import {connection} from 'next/server'
 
-export default function Home() {
+export default async function Home() {
+  await connection()
+  
   return (
     <div className="grid min-h-screen grid-rows-[auto_1fr_auto] items-start justify-center font-[family-name:var(--font-geist-sans)">
       <NavigationBar />
