@@ -20,12 +20,13 @@ export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "def
   useEffect(() => {
     const fetchCars = async () => {
       setIsLoading(true);
-      const data = await CarService.getAllCars();
+      const pickUpLocation = searchParams.get("pickUpLocation") || undefined;
+      const data = await CarService.getAllCars(pickUpLocation);
       setCars(data);
       setIsLoading(false);
     };
     fetchCars();
-  }, []);
+  }, [searchParams]);
 
   // Parse filters from URL
   const filters = {

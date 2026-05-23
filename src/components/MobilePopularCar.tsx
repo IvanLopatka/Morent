@@ -19,12 +19,13 @@ export const MobilePopularCar: FC = () => {
 
   useEffect(() => {
     const fetchCars = async () => {
-      const data = await CarService.getAllCars();
+      const pickUpLocation = searchParams.get("pickUpLocation") || undefined;
+      const data = await CarService.getAllCars(pickUpLocation);
       setCars(data);
       setIsLoading(false);
     };
     fetchCars();
-  }, []);
+  }, [searchParams]);
 
   const filters = {
     types: searchParams.get("type")?.split(",") || [],

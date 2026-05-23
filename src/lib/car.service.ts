@@ -39,10 +39,14 @@ export const CarService = {
     });
   },
 
-  async getAllCars(): Promise<Car[]> {
-    const { data, error } = await supabase
-      .from('cars')
-      .select('*');
+  async getAllCars(location?: string): Promise<Car[]> {
+    let query = supabase.from('cars').select('*');
+    
+    if (location) {
+      query = query.eq('location', location);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error('Error fetching cars:', error);
