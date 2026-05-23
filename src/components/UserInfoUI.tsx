@@ -67,7 +67,6 @@ export const UserInfoUI = ({ profile }: UserInfoUIProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
-    // Check if any changes were made
     const hasChanges =
       formData.full_name !== (profile?.full_name || "") ||
       formData.email !== (profile?.email || "") ||
@@ -95,7 +94,7 @@ export const UserInfoUI = ({ profile }: UserInfoUIProps) => {
 
       console.log("Profile updated successfully");
       setIsEditing(false);
-      // Force a refresh to show updated data from the server components
+      
      
     } catch (error: any) {
       console.error("Error updating profile detailed:", {
