@@ -54,11 +54,22 @@ export const CompareCars: FC<CompareCarsProps> = ({
     queryFn: getCities,
   });
 
-  // Helper to get initial state from URL
+
+  const handleClearFilters = () => {
+    updateURLParams({
+      pickUpLocation: undefined,
+      dropOffLocation: undefined,
+      pickUpDate: undefined,
+      dropOffDate: undefined,
+      pickUpTime: undefined,
+      dropOffTime: undefined,
+    });
+  };
+
   const getInitialLocation = (prefix: string): CarLocation => ({
-    city: { name: "" }, // Don't sync city with URL
+    city: { name: searchParams.get(`${prefix}Location`) || "" },
     date: searchParams.get(`${prefix}Date`) ? new Date(searchParams.get(`${prefix}Date`)!) : undefined,
-    time: "", // Don't sync time with URL
+    time: "",
   });
 
   const [pickUpLocation, setPickUpLocation] = useState<CarLocation>(getInitialLocation("pickUp"));
@@ -100,6 +111,8 @@ export const CompareCars: FC<CompareCarsProps> = ({
     updateURLParams({
       pickUpDate: tempDropOff.date?.toISOString().split('T')[0],
       dropOffDate: tempPickUp.date?.toISOString().split('T')[0],
+      pickUpLocation: tempDropOff.city.name || undefined,
+      dropOffLocation: tempPickUp.city.name || undefined,
     });
   };
 
@@ -132,14 +145,14 @@ export const CompareCars: FC<CompareCarsProps> = ({
 
               <Select
                 value={pickUpLocation.city.name}
-                  onValueChange={(value) => {
-                    setPickUpLocation((prev) => ({
-                      ...prev,
-                      city: { name: value },
-                    }));
-                    // Removed updateURLParams for pickUpCity
-                  }
-                  }
+                onValueChange={(value) => {
+                  setPickUpLocation((prev) => ({
+                    ...prev,
+                    city: { name: value },
+                  }));
+                  updateURLParams({ pickUpLocation: value });
+                }
+                }
               >
                 <SelectTrigger className="border-none p-0 shadow-none">
                   <p className="text-xs font-medium hover:underline  text-gray-500">
@@ -197,7 +210,6 @@ export const CompareCars: FC<CompareCarsProps> = ({
                 value={pickUpLocation.time || undefined}
                 onValueChange={(value) => {
                   setPickUpLocation((prev) => ({ ...prev, time: value }));
-                  // Removed updateURLParams for pickUpTime
                 }
                 }
               >
@@ -217,14 +229,16 @@ export const CompareCars: FC<CompareCarsProps> = ({
           </div>
         </div>
       </Popover>
-
-      <Button
-        size="icon"
-        className="w-15 absolute lg:relative h-15 bg-blue-600"
-        onClick={handleSwapLocations}
-      >
-        <Image src="./swap.svg" alt="swap" width={24} height={24} />
-      </Button>
+      <div className="flex gap-y-4 flex-col">
+        <Button
+          size="icon"
+          className="w-15 absolute lg:relative h-15 bg-blue-600"
+          onClick={handleSwapLocations}
+        >
+          <Image src="./swap.svg" alt="swap" width={24} height={24} />
+        </Button>
+        <Button onClick={handleClearFilters} size="icon" className="bg- w-15 h-15 text-black">Clear <br /> filters</Button>
+      </div>
       <Popover>
         <div
           className={cn(
@@ -247,14 +261,14 @@ export const CompareCars: FC<CompareCarsProps> = ({
 
               <Select
                 value={dropOffLocation.city.name}
-                  onValueChange={(value) => {
-                    setDropOffLocation((prev) => ({
-                      ...prev,
-                      city: { name: value },
-                    }));
-                    // Removed updateURLParams for dropOffCity
-                  }
-                  }
+                onValueChange={(value) => {
+                  setDropOffLocation((prev) => ({
+                    ...prev,
+                    city: { name: value },
+                  }));
+                  updateURLParams({ dropOffLocation: value });
+                }
+                }
               >
                 <SelectTrigger className="border-none p-0 shadow-none">
                   <p className="text-xs font-medium hover:underline  text-gray-500">
@@ -311,7 +325,6 @@ export const CompareCars: FC<CompareCarsProps> = ({
                 value={dropOffLocation.time || undefined}
                 onValueChange={(value) => {
                   setDropOffLocation((prev) => ({ ...prev, time: value }));
-                  // Removed updateURLParams for dropOffTime
                 }
                 }
               >
@@ -329,8 +342,10 @@ export const CompareCars: FC<CompareCarsProps> = ({
               </Select>
             </div>
           </div>
+
         </div>
       </Popover>
+
     </div>
   );
 };
