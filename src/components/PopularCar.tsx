@@ -5,7 +5,6 @@ import { FC } from "react";
 import { CarCard } from "./CarCard";
 import { CarService, Car } from "@/lib/car.service";
 import { useSearchParams } from "next/navigation";
-import { filterCars } from "@/lib/filter-utils";
 
 export const PopularCar: FC = () => {
   const searchParams = useSearchParams();
@@ -14,23 +13,25 @@ export const PopularCar: FC = () => {
 
   useEffect(() => {
     const fetchCars = async () => {
+      setIsLoading(true);
       const pickUpLocation = searchParams.get("pickUpLocation") || undefined;
-      const data = await CarService.getAllCars(pickUpLocation);
+      const data = await CarService.getAllCars({
+        types: searchParams.get("type")?.split(",") || [],
+        capacities: searchParams.get("capacity")?.split(",") || [],
+        maxPrice: parseInt(searchParams.get("price") || "500"),
+        pickUpDate: searchParams.get("pickUpDate") || undefined,
+        dropOffDate: searchParams.get("dropOffDate") || undefined,
+        pickUpTime: searchParams.get("pickUpTime") || undefined,
+        dropOffTime: searchParams.get("dropOffTime") || undefined,
+        pickUpLocation,
+      });
       setCars(data);
       setIsLoading(false);
     };
     fetchCars();
   }, [searchParams]);
 
-  const filters = {
-    types: searchParams.get("type")?.split(",") || [],
-    capacities: searchParams.get("capacity")?.split(",") || [],
-    maxPrice: parseInt(searchParams.get("price") || "500"),
-    pickUpDate: searchParams.get("pickUpDate") || undefined,
-    dropOffDate: searchParams.get("dropOffDate") || undefined,
-  };
-
-  const filteredCars = filterCars(cars, filters);
+  const filteredCars = cars;
 
   if (isLoading) return null;
 

@@ -4,7 +4,6 @@ import { CarCard } from "./CarCard";
 import { FC, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
-import { filterCars } from "@/lib/filter-utils";
 import { CarService, Car } from "@/lib/car.service";
 
 interface RecomendationCarProps {
@@ -21,23 +20,23 @@ export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "def
     const fetchCars = async () => {
       setIsLoading(true);
       const pickUpLocation = searchParams.get("pickUpLocation") || undefined;
-      const data = await CarService.getAllCars(pickUpLocation);
+      const data = await CarService.getAllCars({
+        types: searchParams.get("type")?.split(",") || [],
+        capacities: searchParams.get("capacity")?.split(",") || [],
+        maxPrice: parseInt(searchParams.get("price") || "500"),
+        pickUpDate: searchParams.get("pickUpDate") || undefined,
+        dropOffDate: searchParams.get("dropOffDate") || undefined,
+        pickUpTime: searchParams.get("pickUpTime") || undefined,
+        dropOffTime: searchParams.get("dropOffTime") || undefined,
+        pickUpLocation,
+      });
       setCars(data);
       setIsLoading(false);
     };
     fetchCars();
   }, [searchParams]);
 
-  // Parse filters from URL
-  const filters = {
-    types: searchParams.get("type")?.split(",") || [],
-    capacities: searchParams.get("capacity")?.split(",") || [],
-    maxPrice: parseInt(searchParams.get("price") || "100"),
-    pickUpDate: searchParams.get("pickUpDate") || undefined,
-    dropOffDate: searchParams.get("dropOffDate") || undefined,
-  };
-
-  const filteredCars = filterCars(cars, filters);
+  const filteredCars = cars;
 
   if (isLoading) {
     return <div className="px-5 md:px-16 mt-8 mb-12 text-center text-gray-500">Loading cars...</div>;
@@ -54,8 +53,8 @@ export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "def
       {filteredCars.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 bg-gray-50 rounded-3xl border border-dashed border-gray-200">
           <p className="text-gray-500 font-medium">No cars found matching your filters.</p>
-          <Button 
-            variant="link" 
+          <Button
+            variant="link"
             onClick={() => router.push("/catalog")}
             className="text-blue-600 mt-2"
           >
@@ -64,7 +63,6 @@ export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "def
         </div>
       ) : (
         <>
-          {/* Mobile: show first 5 of filtered */}
           <div className="flex lg:hidden flex-wrap gap-y-8 justify-center">
             {filteredCars.slice(0, 5).map((car) => (
               <div className="w-full" key={car.id}>
@@ -77,18 +75,16 @@ export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "def
                   price={car.price}
                   seats={car.seats}
                   spending={car.spending}
-                  
+
                 />
               </div>
             ))}
           </div>
 
-          {/* Large screens: show filtered cars */}
           <div className={
-            `hidden lg:grid gap-8 ${
-              gridVariant === "catalog" 
-                ? "grid-cols-2 xl:grid-cols-3" 
-                : "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            `hidden lg:grid gap-8 ${gridVariant === "catalog"
+              ? "grid-cols-2 xl:grid-cols-3"
+              : "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             }`
           }>
             {filteredCars.slice(0, gridVariant === "catalog" ? 9 : 8).map((car) => (
