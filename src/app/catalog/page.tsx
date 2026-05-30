@@ -21,7 +21,9 @@ export default async function Home() {
           <Sidebar />
         </Suspense>
         <div className="flex-grow flex-col">
-          <CompareCars gapVariant="catalog" widthVariant="catalog" />
+          <Suspense fallback={<div className="h-[120px]" />}>
+            <CompareCars gapVariant="catalog" widthVariant="catalog" />
+          </Suspense>
           <Suspense fallback={<div className="p-20 text-center">Loading cars...</div>}>
             <RecomendationCar gridVariant="catalog" />
           </Suspense>

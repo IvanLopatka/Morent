@@ -19,7 +19,9 @@ export default async function Home() {
       <MobileSearch />
       <RentalCarCard />
       <MobileAd />
-      <CompareCars gapVariant="default" widthVariant="default" />
+      <Suspense fallback={<div className="h-[140px]" />}>
+        <CompareCars gapVariant="default" widthVariant="default" />
+      </Suspense>
       <PopularCar />
       <MobilePopularCar />
       <Suspense fallback={<div>Loading...</div>}>
