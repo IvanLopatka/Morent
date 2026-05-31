@@ -42,7 +42,7 @@ export const MobilePopularCar: FC = () => {
 
   return (
     <Carousel className="lg:hidden mb-8 block px-4 mask-r-from-20% w-screen">
-      <CarouselContent className="ml-2 pr-4 gap-x-5">
+      <CarouselContent className="ml-2 pr-4 gap-x-10">
         {filteredCars.slice(0, 4).map((car) => (
           <CarouselItem className="basis-2/3 overflow-visible" key={car.id}>
             <CarCard
