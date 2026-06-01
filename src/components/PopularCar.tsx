@@ -45,7 +45,7 @@ export const PopularCar: FC = () => {
           View all
         </p>
       </div>
-      <div className="hidden gap-4 lg:flex justify-start">
+      <div className="hidden gap-8 lg:flex justify-start">
         {filteredCars.slice(0, 4).map((car) => (
           <div key={car.id}>
             <CarCard
