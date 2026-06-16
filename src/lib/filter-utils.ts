@@ -8,6 +8,7 @@ export interface CarFilters {
   dropOffDate?: string;
   pickUpTime?: string;
   dropOffTime?: string;
+  search?: string;
 }
 
 export const filterCars = (cars: any[], filters: CarFilters) => {

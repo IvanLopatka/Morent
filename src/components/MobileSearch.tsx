@@ -1,10 +1,43 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { FC } from "react";
 import Image from "next/image";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 export const MobileSearch: FC = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const [searchVal, setSearchVal] = useState(searchParams.get("search") || "");
+
+  // Sync external search param changes to local state
+  useEffect(() => {
+    setSearchVal(searchParams.get("search") || "");
+  }, [searchParams]);
+
+  // Debounced search logic to update the URL
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      const currentSearch = searchParams.get("search") || "";
+      if (searchVal === currentSearch) return;
+
+      const params = new URLSearchParams(searchParams.toString());
+      if (searchVal.trim()) {
+        params.set("search", searchVal.trim());
+      } else {
+        params.delete("search");
+      }
+
+      const targetPath = (pathname === "/" || pathname.startsWith("/catalog")) ? pathname : "/catalog";
+      router.push(`${targetPath}?${params.toString()}`, { scroll: false });
+    }, 400);
+
+    return () => clearTimeout(handler);
+  }, [searchVal, router, searchParams, pathname]);
+
   return (
     <div className="w-full relative px-6 mb-8 h-[48px] bg-white justify-center gap-x-4 items-center lg:hidden flex">
       <Input
@@ -12,6 +45,8 @@ export const MobileSearch: FC = () => {
         placeholder="Search something here"
         id="text"
         type="search"
+        value={searchVal}
+        onChange={(e) => setSearchVal(e.target.value)}
       />
       <Image
         className="absolute top-3 left-9"

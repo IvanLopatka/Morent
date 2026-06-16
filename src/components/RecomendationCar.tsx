@@ -29,6 +29,7 @@ export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "def
         pickUpTime: searchParams.get("pickUpTime") || undefined,
         dropOffTime: searchParams.get("dropOffTime") || undefined,
         pickUpLocation,
+        search: searchParams.get("search") || undefined,
       });
       setCars(data);
       setIsLoading(false);

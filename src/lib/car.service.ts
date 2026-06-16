@@ -91,6 +91,11 @@ export const CarService = {
           .gte('available_to_time', filters.dropOffTime);
       }
 
+      // Filter by name search
+      if (filters.search) {
+        query = query.ilike('name', `%${filters.search}%`);
+      }
+
       // Sort by availability start timestamp if dates are provided
       if (filters.pickUpDate) {
         query = query
@@ -98,6 +103,9 @@ export const CarService = {
           .order('available_from_time', { ascending: true });
       }
     }
+
+    // Always sort by name on backend
+    query = query.order('name', { ascending: true });
 
     const { data, error } = await query;
 

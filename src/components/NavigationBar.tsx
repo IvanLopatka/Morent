@@ -6,8 +6,10 @@ import React from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Input } from "./ui/input";
 
 import { useState, useEffect } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { AuthModal } from "../app/auth/AuthModal";
 import { createClient } from "@/utils/supabase/client";
 import { CarService, Car } from "@/lib/car.service";
@@ -17,12 +19,42 @@ import { useAuthStore } from "@/store/auth.store";
 const supabase = createClient();
 
 export const NavigationBar: FC = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authView, setAuthView] = useState<"login" | "register">("login");
   const { session, setSession } = useAuthStore();
   const [mounted, setMounted] = useState(false);
   const [savedCars, setSavedCars] = useState<Car[]>([]);
   const [isSavedCarsOpen, setIsSavedCarsOpen] = useState(false);
+  const [searchVal, setSearchVal] = useState(searchParams.get("search") || "");
+
+  // Sync external search param changes to local state
+  useEffect(() => {
+    setSearchVal(searchParams.get("search") || "");
+  }, [searchParams]);
+
+  // Debounced search logic to update the URL
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      const currentSearch = searchParams.get("search") || "";
+      if (searchVal === currentSearch) return;
+
+      const params = new URLSearchParams(searchParams.toString());
+      if (searchVal.trim()) {
+        params.set("search", searchVal.trim());
+      } else {
+        params.delete("search");
+      }
+
+      const targetPath = (pathname === "/" || pathname.startsWith("/catalog")) ? pathname : "/catalog";
+      router.push(`${targetPath}?${params.toString()}`, { scroll: false });
+    }, 400);
+
+    return () => clearTimeout(handler);
+  }, [searchVal, router, searchParams, pathname]);
 
   const fetchSavedCars = async () => {
     if (session?.user?.id) {
@@ -39,7 +71,7 @@ export const NavigationBar: FC = () => {
 
   useEffect(() => {
     setMounted(true);
-    
+
     // Initial fetch to populate the store
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -64,7 +96,30 @@ export const NavigationBar: FC = () => {
             MORENT
           </h3>
         </Link>
-        
+
+        <div className="relative items-center hidden lg:flex">
+          <Input
+            className="pl-12  rounded-2xl text-2xl"
+            placeholder="Search something here"
+            id="text"
+            size={50}
+            type="search"
+            value={searchVal}
+            onChange={(e) => setSearchVal(e.target.value)}
+          />
+          <Image
+            className="absolute top-2 left-3"
+            src="/search.svg"
+            alt="search"
+            height={24}
+            width={24}
+          />
+          <Button className="absolute right-0" type="button" variant="ghost">
+            <Image src="/filter.svg" alt="filter" width={24} height={24} />
+          </Button>
+        </div>
+
+
       </div>
       <div className="flex gap-0 lg:gap-5">
         {mounted ? (
@@ -94,8 +149,8 @@ export const NavigationBar: FC = () => {
                 {!session ? (
                   <div className="p-8 text-center bg-white">
                     <p className="text-slate-500 text-sm font-medium">Please login to view saved cars</p>
-                    <Button 
-                      variant="link" 
+                    <Button
+                      variant="link"
                       className="text-blue-600 mt-2 h-auto p-0 text-sm"
                       onClick={() => {
                         setIsSavedCarsOpen(false);
@@ -129,9 +184,9 @@ export const NavigationBar: FC = () => {
                           <p className="text-xs text-slate-500 font-medium">${car.price}/day</p>
                         </div>
                         <div className="flex flex-col gap-1">
-                          <Button 
-                            size="icon" 
-                            variant="ghost" 
+                          <Button
+                            size="icon"
+                            variant="ghost"
                             className="h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50"
                             onClick={async (e) => {
                               e.preventDefault();
@@ -141,7 +196,7 @@ export const NavigationBar: FC = () => {
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
-                          <Link 
+                          <Link
                             href={`/catalog/${car.id}`}
                             onClick={() => setIsSavedCarsOpen(false)}
                             className="text-[10px] text-blue-600 font-bold hover:underline py-1 px-2 text-center"
@@ -156,7 +211,7 @@ export const NavigationBar: FC = () => {
               </div>
               {session && savedCars.length > 0 && (
                 <div className="p-3 bg-slate-50/50 text-center border-t border-slate-100">
-                  <Link 
+                  <Link
                     href={`/profile/${session.user.id}`}
                     onClick={() => setIsSavedCarsOpen(false)}
                     className="text-xs text-blue-600 font-bold hover:underline"
@@ -199,11 +254,11 @@ export const NavigationBar: FC = () => {
               onClick={() => setIsAuthModalOpen(true)}
             >
               {session?.user?.user_metadata?.avatar_url ? (
-                <Image 
-                  src={session.user.user_metadata.avatar_url} 
-                  alt="profile" 
-                  width={44} 
-                  height={44} 
+                <Image
+                  src={session.user.user_metadata.avatar_url}
+                  alt="profile"
+                  width={44}
+                  height={44}
                   className="w-full h-full object-cover"
                   unoptimized
                 />
@@ -226,17 +281,17 @@ export const NavigationBar: FC = () => {
                 <div className="w-full flex flex-col h-full p-4">
                   <h3 className="text-xl font-semibold">Login or Register in your account</h3>
                   <div className="flex flex-row gap-2 mt-2">
-                    <Button 
-                      className="w-1/2" 
-                      size="lg" 
+                    <Button
+                      className="w-1/2"
+                      size="lg"
                       variant="outline"
                       onClick={() => openAuth("login")}
                     >
                       Login
                     </Button>
-                    <Button 
-                      className="w-1/2" 
-                      size="lg" 
+                    <Button
+                      className="w-1/2"
+                      size="lg"
                       variant="default"
                       onClick={() => openAuth("register")}
                     >
@@ -257,10 +312,10 @@ export const NavigationBar: FC = () => {
           </Button>
         )}
       </div>
-      <AuthModal 
-        isOpen={isAuthModalOpen} 
-        onClose={() => setIsAuthModalOpen(false)} 
-        defaultView={authView} 
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        defaultView={authView}
       />
     </nav>
   );
