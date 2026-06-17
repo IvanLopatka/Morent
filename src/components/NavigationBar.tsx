@@ -5,7 +5,7 @@ import React from "react";
 
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Popover, PopoverContent, PopoverTrigger, PopoverAnchor } from "./ui/popover";
 import { Input } from "./ui/input";
 
 import { useState, useEffect } from "react";
@@ -56,6 +56,38 @@ export const NavigationBar: FC = () => {
     return () => clearTimeout(handler);
   }, [searchVal, router, searchParams, pathname]);
 
+  const [isSearchPopoverOpen, setIsSearchPopoverOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<Car[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  // Popover search results fetching for homepage search
+  useEffect(() => {
+    if (pathname !== "/") {
+      setIsSearchPopoverOpen(false);
+      return;
+    }
+
+    if (!searchVal.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    const fetchResults = async () => {
+      setIsSearching(true);
+      try {
+        const results = await CarService.getAllCars({ search: searchVal });
+        setSearchResults(results);
+      } catch (err) {
+        console.error("Error searching cars:", err);
+      } finally {
+        setIsSearching(false);
+      }
+    };
+
+    const handler = setTimeout(fetchResults, 300);
+    return () => clearTimeout(handler);
+  }, [searchVal, pathname]);
+
   const fetchSavedCars = async () => {
     if (session?.user?.id) {
       const cars = await CarService.getSavedCars(session.user.id);
@@ -97,27 +129,99 @@ export const NavigationBar: FC = () => {
           </h3>
         </Link>
 
-        <div className="relative items-center hidden lg:flex">
-          <Input
-            className="pl-12  rounded-2xl text-2xl"
-            placeholder="Search something here"
-            id="text"
-            size={50}
-            type="search"
-            value={searchVal}
-            onChange={(e) => setSearchVal(e.target.value)}
-          />
-          <Image
-            className="absolute top-2 left-3"
-            src="/search.svg"
-            alt="search"
-            height={24}
-            width={24}
-          />
-          <Button className="absolute right-0" type="button" variant="ghost">
-            <Image src="/filter.svg" alt="filter" width={24} height={24} />
-          </Button>
-        </div>
+        <Popover open={pathname === "/" && isSearchPopoverOpen} onOpenChange={setIsSearchPopoverOpen}>
+          <PopoverAnchor asChild>
+            <div className="relative items-center hidden lg:flex">
+              <Input
+                className="pl-12  rounded-2xl text-2xl"
+                placeholder="Search something here"
+                id="text"
+                size={50}
+                type="search"
+                value={searchVal}
+                onChange={(e) => setSearchVal(e.target.value)}
+                onFocus={() => {
+                  if (pathname === "/") setIsSearchPopoverOpen(true);
+                }}
+              />
+              <Image
+                className="absolute top-2 left-3"
+                src="/search.svg"
+                alt="search"
+                height={24}
+                width={24}
+              />
+              <Button className="absolute right-0" type="button" variant="ghost">
+                <Image src="/filter.svg" alt="filter" width={24} height={24} />
+              </Button>
+            </div>
+          </PopoverAnchor>
+          <PopoverContent
+            className="w-[492px] p-0 overflow-hidden rounded-2xl shadow-2xl border-slate-100 bg-white"
+            align="start"
+            sideOffset={8}
+            onOpenAutoFocus={(e) => e.preventDefault()}
+          >
+            <div className="p-2 max-h-[350px] overflow-y-auto custom-scrollbar">
+              {isSearching ? (
+                <div className="p-8 text-center text-slate-500 text-sm font-medium">
+                  Searching cars...
+                </div>
+              ) : !searchVal.trim() ? (
+                <div className="p-6 text-center text-slate-500 text-sm">
+                  <p className="font-semibold text-slate-700 mb-2">Type to search cars</p>
+                  <p className="text-xs text-slate-400">Find your next drive by typing its name...</p>
+                </div>
+              ) : searchResults.length === 0 ? (
+                <div className="p-6 text-center text-slate-500 text-sm">
+                  <p className="font-semibold text-slate-700">No cars found</p>
+                  <p className="text-xs text-slate-400 mt-1">Try checking your spelling or search another model</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-slate-50">
+                  {searchResults.slice(0, 5).map((car) => (
+                    <Link
+                      key={car.id}
+                      href={`/catalog/${car.id}`}
+                      onClick={() => setIsSearchPopoverOpen(false)}
+                      className="p-3 flex items-center gap-3 hover:bg-slate-50 transition-colors group"
+                    >
+                      <div className="relative w-16 h-12 rounded-lg overflow-hidden bg-slate-50 flex-shrink-0">
+                        <Image
+                          src={car.thumbnail}
+                          alt={car.name}
+                          fill
+                          className="object-contain p-1"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-slate-900 truncate group-hover:text-blue-600 transition-colors">
+                          {car.name}
+                        </p>
+                        <p className="text-xs text-slate-500 font-medium capitalize">{car.type}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-bold text-slate-900">${car.price}</p>
+                        <p className="text-[10px] text-slate-400">/day</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+            {searchVal.trim() && searchResults.length > 0 && (
+              <div className="p-3 bg-slate-50/50 text-center border-t border-slate-100">
+                <Link
+                  href={`/catalog?search=${encodeURIComponent(searchVal)}`}
+                  onClick={() => setIsSearchPopoverOpen(false)}
+                  className="text-xs text-blue-600 font-bold hover:underline"
+                >
+                  View all {searchResults.length} results in catalog
+                </Link>
+              </div>
+            )}
+          </PopoverContent>
+        </Popover>
 
 
       </div>

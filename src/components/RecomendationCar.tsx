@@ -3,7 +3,7 @@
 import { CarCard } from "./CarCard";
 import { FC, useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { CarService, Car } from "@/lib/car.service";
 
 interface RecomendationCarProps {
@@ -13,6 +13,7 @@ interface RecomendationCarProps {
 export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "default" }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [cars, setCars] = useState<Car[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -29,13 +30,13 @@ export const RecomendationCar: FC<RecomendationCarProps> = ({ gridVariant = "def
         pickUpTime: searchParams.get("pickUpTime") || undefined,
         dropOffTime: searchParams.get("dropOffTime") || undefined,
         pickUpLocation,
-        search: searchParams.get("search") || undefined,
+        search: pathname === "/" ? undefined : (searchParams.get("search") || undefined),
       });
       setCars(data);
       setIsLoading(false);
     };
     fetchCars();
-  }, [searchParams]);
+  }, [searchParams, pathname]);
 
   const filteredCars = cars;
 
