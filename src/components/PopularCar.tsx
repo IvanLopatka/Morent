@@ -5,6 +5,7 @@ import { FC } from "react";
 import { CarCard } from "./CarCard";
 import { CarService, Car } from "@/lib/car.service";
 import { usePathname, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export const PopularCar: FC = () => {
   const searchParams = useSearchParams();
@@ -43,9 +44,12 @@ export const PopularCar: FC = () => {
         <p className="md:text-base text-sm text-gray-400 font-semibold">
           Popular Car
         </p>
-        <p className="md:text-base text-xs font-semibold text-blue-600 ">
+        <Link
+          href={`/catalog?search=${encodeURIComponent(searchParams.get("search") || "")}`}
+          className="md:text-base text-xs font-semibold text-blue-600 hover:underline"
+        >
           View all
-        </p>
+        </Link>
       </div>
       <div className="hidden gap-8 lg:flex justify-start">
         {filteredCars.slice(0, 4).map((car) => (
